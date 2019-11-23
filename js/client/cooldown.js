@@ -7,7 +7,7 @@ let finishTime = 0;
 
 function isCooldownReady()
 {
-    return isCooldownReady;
+    return isCooldownReadyBool;
 }
 
 function getCooldown()
@@ -15,6 +15,22 @@ function getCooldown()
     let t = finishTime - Date.now();
     if(t < 0){t = 0;}
     return t;
+}
+
+function getCooldownPercent()
+{
+    let a = Date.now();
+    if(a > finishTime)
+    {
+        return 0;
+    }else
+    {
+        let small = a - initialTime;
+        let all = finishTime - initialTime;
+
+        return 1 - (small / all);
+    }
+
 }
 
 function setCooldown(time, string)
