@@ -12,7 +12,10 @@ var TotemTypes = {
 	rocky : 5,
 	petrol : 6,
 	nuclearplant : 7,
-	launchsite : 8
+	launchsite : 8,
+	house1 : 9,
+	lumber1 : 10,
+	cannon: 11,
 };
 
 
