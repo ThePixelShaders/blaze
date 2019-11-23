@@ -81,7 +81,39 @@
 				transform: translate(-200%, 75%);
 			}
 
+
+			#hotbar{
+				position:absolute;
+				left :37%;
+				bottom: 6px;
+			}
+
+			#hotbar ul{
+				list-style-type: none;
+				margin: 0;
+				padding: 0;
+				overflow: hidden;
+				background: #0f6600;
+				border-style: dashed;
+				border-width: 5px;
+				border-color: black;
+				color : white;
+			}
+			#hotbar ul li{
+				float: left;
+				display: block;
+				color: white;
+				text-align: center;
+				padding: 14px 16px;
+				text-decoration: none;
+			}
+
+			.hotbar-box-active{
+				background-color: #36d61f9c;
+			}
 		</style>
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	</head>
 	<body>
 	
@@ -135,6 +167,34 @@
 
 
 		</div>
+
+		<div id="hotbar">
+			
+			<!-- <input id="hotbar-input"  onkeydown="hotbar()"> -->
+
+			<ul>
+				<li id="hotbar-box1" class="hotbar-box-active"><img src="images/townhall.png" style="max-width: 50px; max-height: 50px;">
+					<p>Townhall</p>
+				</li>
+
+				<li id="hotbar-box2"><img src="images/townhall.png" style="max-width: 50px; max-height: 50px;">
+					<p>Townhall</p>
+				</li>
+
+				<li id="hotbar-box3"><img src="images/townhall.png" style="max-width: 50px; max-height: 50px;">
+					<p>Townhall</p>
+				</li>
+
+				<li id="hotbar-box4"><img src="images/townhall.png" style="max-width: 50px; max-height: 50px;">
+					<p>Townhall</p>
+				</li>
+
+				<li id="hotbar-box5"><img src="images/townhall.png" style="max-width: 50px; max-height: 50px;">
+					<p>Townhall</p>
+				</li>
+			</ul>
+
+		</div>
 		
 
 		<div id="info">
@@ -144,6 +204,7 @@
 			<a href="https://github.com/antonioganea/blaze">Check out github page!</a>
 		</div>
 
+		
 		<script src="https://cdn.socket.io/socket.io-1.7.3.js"></script>
 		<script src="config.js"></script>
 		<script src="three/three.min.js"></script>
