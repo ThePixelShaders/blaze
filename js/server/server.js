@@ -62,11 +62,13 @@ var SpawnManager = {
 
 	availableSpaces: [], // available places ( as coordinates x/y )
 
+	marginoffset : 10,
+
 	// Computes the spaces available to spawn at
 	computeAvailableSpaces : function (){
 		this.availableSpaces = []; // wipe the other array
-		for ( let x = 0; x < Generator.WORLD_WIDTH; x++ ){
-			for ( let y = 0; y < Generator.WORLD_HEIGHT; y++ ){
+		for ( let x = this.marginoffset; x < Generator.WORLD_WIDTH - this.marginoffset; x++ ){
+			for ( let y = this.marginoffset; y < Generator.WORLD_HEIGHT - this.marginoffset; y++ ){
 				// if the current tile is between the minimum and maximum water levels, people can spawn there
 				if ( heightmap[x][y] > waterlevel + this.waterLevelOffset && heightmap[x][y] < waterlevel + this.maximumLevelDifference + this.waterLevelOffset ){
 					this.availableSpaces.push( { x: x, y: y } );
