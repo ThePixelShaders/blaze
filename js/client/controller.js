@@ -189,7 +189,16 @@ function onDocumentKeyDown( event ) {
 			$("li#hotbar-box5").addClass("hotbar-box-active");
 			HotBar.currentActive = 5;
 		break;
-	
+		case 54: /*6*/ 
+			$("li.hotbar-box-active").removeClass("hotbar-box-active");
+			$("li#hotbar-box6").addClass("hotbar-box-active");
+			HotBar.currentActive = 6;
+		break;
+		case 55: /*7*/ 
+			$("li.hotbar-box-active").removeClass("hotbar-box-active");
+			$("li#hotbar-box7").addClass("hotbar-box-active");
+			HotBar.currentActive = 7;
+		break;
 	}
 
 }
