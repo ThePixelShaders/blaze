@@ -188,6 +188,7 @@ SceneManager = {
 		this.scene.add(totem);
 		
 		this.placedTotems[x][y] = totem;
+		this.ownerMap[x][y] = this.ownerID;
 		
 		if ( animated ){
 			totem.scale.x = 1/16; totem.scale.y = 1/16; totem.scale.z = 1/16;
@@ -207,6 +208,7 @@ SceneManager = {
 
 			let totem = this.placedTotems[x][y];
 			this.placedTotems[x][y] = 0;
+			this.ownerMap[x][y] = "none";
 			
 			
 			//this.dirtyBlocks.push([totem,0,false,false]);
