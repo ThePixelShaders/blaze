@@ -1,6 +1,6 @@
 let isCooldownReadyBool = true;
 let interval;
-
+let progressbar = document.getElementById("progress-bar");
 let initialTime = 0;
 let finishTime = 0;
 
@@ -53,3 +53,9 @@ function setCooldown(time, string)
 }
 
 setCooldown(1000, "Ț");
+
+function setProgressbar(value){
+    value *= 100;
+    value += "%";
+    progressbar.style.width = value;
+}
