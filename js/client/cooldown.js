@@ -41,6 +41,7 @@ function setCooldown(time, string)
     interval = setInterval(() => {
         let a = getCooldown();
         setTime((Math.floor(a/1000)));
+        setProgressbar(getCooldownPercent());
         if(getCooldown()==0)
         {
             isCooldownReadyBool = true;
@@ -52,7 +53,6 @@ function setCooldown(time, string)
 
 }
 
-setCooldown(1000, "Ț");
 
 function setProgressbar(value){
     value *= 100;
