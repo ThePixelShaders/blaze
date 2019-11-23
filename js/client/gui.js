@@ -8,3 +8,8 @@ counters.stone = document.getElementById("res_petrol");
 var upperDiv = document.getElementById("info");
 function setDiv( text ) { upperDiv.innerHTML = text; }
 function logDiv( text ) { upperDiv.innerHTML += text + "<br>"; }
+
+// this is the login div
+var middleDiv = document.getElementById("middle");
+
+//middleDiv.style.visibility = "hidden"; 
