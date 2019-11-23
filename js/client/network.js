@@ -57,6 +57,16 @@ socket.on('setSpawnPoint', function( x, y ){
 	SceneManager.addTotem( x, y, TotemTypes.residential, true );
 	socket.emit( "placeTotem", x, y, TotemTypes.residential );
 	console.log("Spawnpoint set at " + x + ' ' + y );
+
+	spectateMode = false;
+
+	let currentX = -2125+(x+5)*50
+	let currentY = -2125+(y+5)*50
+
+	camera.position.x = currentX;
+	camera.position.z = currentY;
+	camera.position.y = 700;
+	camera.lookAt( currentX-250, 0 , currentY-250 );
 })
 
 
