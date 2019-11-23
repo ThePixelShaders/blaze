@@ -36,6 +36,8 @@ function onDocumentMouseMove( event ) {
 		
 		let tX = ( pos.x + 2125 ) / 50;
 		let tZ = ( pos.z + 2125 ) / 50;
+
+		//selectionCylinder.material.color.setHex(0xff0000);
 		
 		selectionCylinder.position.set(pos.x,heightmap[tX][tZ]+30,pos.z);
 	}

@@ -47,6 +47,8 @@ SceneManager = {
 	totemMap : null,
 	heightmap : null,
 	placedTotems : null,
+	ownerMap : [],
+	ownerID : "none", // this is the client's owner ID ( serverside socket id )
 	
 	dirtyBlocks : [],
 	
@@ -76,9 +78,11 @@ SceneManager = {
 		
 		for (let x = 0; x < 80; x++) {
 			this.placedTotems[x] = [];
-		  for (let y = 0; y < 80; y++) {
-			  this.placedTotems[x][y] = 0;
-		  }
+			this.ownerMap[x] = [];
+			for (let y = 0; y < 80; y++) {
+				this.placedTotems[x][y] = 0;
+				this.ownerMap[x][y] = "none";
+			}
 		}
 		
 		for ( let x = 0; x < 80; x++ ){

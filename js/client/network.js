@@ -53,6 +53,11 @@ socket.on('mapseed', function(seed){
 	}
 });
 
+socket.on("setOwnerID", function(socketID) {
+	console.log("Received owner id : " + socketID);
+	SceneManager.ownerID = socketID;
+})
+
 socket.on('setSpawnPoint', function( x, y ){
 	SceneManager.addTotem( x, y, TotemTypes.residential, true );
 	socket.emit( "placeTotem", x, y, TotemTypes.residential );
@@ -70,17 +75,25 @@ socket.on('setSpawnPoint', function( x, y ){
 })
 
 
-socket.on('placeTotem', function(x,y,type){
+socket.on('placeTotem', function(x,y,type, owner){
 	SceneManager.addTotem( x, y, type, true );
+	SceneManager.ownerMap[x][y] = owner;
 });
 
 socket.on('removeTotem', function(x,y){
 	SceneManager.removeTotem( x, y, true );
+	SceneManager.ownerMap[x][y] = "none";
 });
 
 socket.on('deltas', function(deltaBuffer){
 	for ( let i = 0; i < deltaBuffer.length; i++ ){
 		SceneManager.setTotem( deltaBuffer[i].x, deltaBuffer[i].y, deltaBuffer[i].type );
+		if ( deltaBuffer[i] ){
+			SceneManager.ownerMap = deltaBuffer[i].owner;
+		}else{
+			SceneManager.ownerMap = "none";
+		}
+		
 	}
 	console.log("Received and applied deltas (" + deltaBuffer.length + " changes )");
 });
