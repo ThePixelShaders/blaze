@@ -23,12 +23,48 @@ var totemMap = []; // a clone of the initial, the initial one is left unaltered 
 
 var deltaBuffer = []; // delta data for people that join later, useful for spectate mode
 
-for ( let x = 0; x < 5*16; x++ ){
+for ( let x = 0; x < Generator.WORLD_WIDTH; x++ ){
 	totemMap[x] = [];
-	for ( let y = 0; y < 5*16; y++ ){
+	for ( let y = 0; y < Generator.WORLD_HEIGHT; y++ ){
 		totemMap[x][y] = initialTotemMap[x][y];
 	}
 }
+
+// This objects holds data about the available places on the map, for spawning
+var SpawnManager = {
+	maximumLevelDifference: 30, // Maximum level difference between water level and possible spawn locations
+	waterLevelOffset = 5, // ( starting from waterLevel + waterLevelOffset, people can spawn ) ( keeps some distance from the actual water )
+
+	availableSpaces: [], // available places ( as coordinates x/y )
+
+	// Computes the spaces available to spawn at
+	computeAvailableSpaces : function (){
+		this.availableSpaces = []; // wipe the other array
+		for ( let x = 0; x < Generator.WORLD_WIDTH; x++ ){
+			for ( let y = 0; y < Generator.WORLD_HEIGHT; y++ ){
+				// if the current tile is between the minimum and maximum water levels, people can spawn there
+				if ( heightmap[x][y] > waterLevel + this.waterLevelOffset && heightmap[x][y] < waterLevel + this.maximumLevelDifference + this.waterLevelOffset ){
+					this.availableSpaces.push( { x: x, y: y } );
+				}
+			}
+		}
+	},
+
+	dispatchSpawnPoint : function(){
+		// randum = random in range : 0 - availableSpaces.length
+		let randnum = Math.floor(Math.random() * this.availableSpaces.length);
+
+		let spawnpoint = this.availableSpaces[randnum];
+
+		// remove from availableSpaces
+		this.availableSpaces.splice(randnum, 1);
+
+		return spawnpoint;
+	}
+
+}
+
+SpawnManager.computeAvailableSpaces();
 
 // Some sort of getters and setters for the map, that compute deltas
 function placeTotem( x, y, type ){
@@ -63,9 +99,9 @@ http.listen(port, function(){
 
 io.on('connection', function(socket){
 	
-	console.log("User connected!");
+	console.log("User connected! " + socket.id.toString());
 	admin.notify("User connected!");
-	
+
 	socket.on('requestseed', function(msg){
 		console.log("Serving seed");
 		socket.emit('mapseed', mapseed);
@@ -89,7 +125,6 @@ io.on('connection', function(socket){
 		removeTotem(x,y);
 		socket.broadcast.emit('removeTotem',x,y);
 	});
-	
 	
 	socket.on("disconnect", function(){
 		console.log("User disconnected!")
