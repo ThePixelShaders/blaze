@@ -66,7 +66,7 @@ function onDocumentMouseDown( event ) {
 			}*/
 			
 			SceneManager.addTotem( tX, tZ, TotemTypes.lumber1 );
-			socket.emit( "placeTotem", tX, tZ, TotemTypes.lumber1 );
+			socket.emit( "placeTotem", tX, tZ, TotemTypes.lumber1);
 		}
 	}
 }
