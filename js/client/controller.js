@@ -65,8 +65,8 @@ function onDocumentMouseDown( event ) {
 				socket.emit( "placeTotem", tX, tZ, TotemTypes.residential );
 			}*/
 			
-			SceneManager.addTotem( tX, tZ, TotemTypes.launchsite );
-			socket.emit( "placeTotem", tX, tZ, TotemTypes.launchsite );
+			SceneManager.addTotem( tX, tZ, TotemTypes.lumber1 );
+			socket.emit( "placeTotem", tX, tZ, TotemTypes.lumber1 );
 		}
 	}
 }
