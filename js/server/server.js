@@ -29,6 +29,7 @@ var ownerMap = []; // world-size matrix to keep track of ownerships
 
 var deltaBuffer = []; // delta data for people that join later, useful for spectate mode
 
+/*
 var OwnershipManager = {
 	ownerIDCounter : 1,
 	owners: {},
@@ -44,7 +45,7 @@ var OwnershipManager = {
 		this.ownerIDCounter += 1;
 		return this.owners[socketID];
 	}
-}
+}*/
 
 for ( let x = 0; x < Generator.WORLD_WIDTH; x++ ){
 	totemMap[x] = [];
@@ -96,7 +97,7 @@ SpawnManager.computeAvailableSpaces();
 function placeTotem( x, y, type, owner ){ // owner will be the socketID
 	totemMap[x][y] = type;
 	deltaBuffer = deltaBuffer.filter(function (entry) { return  !(entry.x == x && entry.y == y); });
-
+	ownerMap[x][y] = owner;
 
 	
 	if ( initialTotemMap[x][y] != totemMap[x][y] ){
@@ -107,10 +108,12 @@ function placeTotem( x, y, type, owner ){ // owner will be the socketID
 
 function removeTotem( x, y ){
 	totemMap[x][y] = 0;
+	ownerMap[x][y] = "none";
+
 	deltaBuffer = deltaBuffer.filter(function (entry) { return !(entry.x == x && entry.y == y); });
 	
 	if ( initialTotemMap[x][y] != 0 ){
-		deltaBuffer.push( {x:x,y:y,type:0} );
+		deltaBuffer.push( {x:x,y:y,type:0, owner:"none"} );
 	}
 	
 	//console.log(deltaBuffer);
@@ -130,6 +133,8 @@ io.on('connection', function(socket){
 	console.log("User connected! " + socket.id.toString());
 	admin.notify("User connected!");
 
+	socket.emit("setOwnerID", socket.id);
+
 	socket.on('requestseed', function(msg){
 		console.log("Serving seed");
 		socket.emit('mapseed', mapseed);
@@ -137,6 +142,8 @@ io.on('connection', function(socket){
 		let newpoint = SpawnManager.dispatchSpawnPoint();
 		socket.emit('setSpawnPoint', newpoint.x, newpoint.y );
 		console.log("Requested spawnpoint at " + newpoint.x + ' ' + newpoint.y );
+
+
 	});
 	
 	socket.on('requestdeltas', function(){
@@ -149,7 +156,8 @@ io.on('connection', function(socket){
 	socket.on('placeTotem', function(x,y,type){
 		//console.log("placed totem " + type + " at coords : " + x + " " + y);
 		placeTotem( x, y,type, socket.id );
-		socket.broadcast.emit('placeTotem',x,y,type);
+		console.log( x + ' ' + y + ' ' + type + ' ' + socket.id);
+		socket.broadcast.emit('placeTotem',x,y,type, socket.id);
 	});
 	
 	socket.on('removeTotem', function(x,y){

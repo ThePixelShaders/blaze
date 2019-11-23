@@ -47,6 +47,8 @@ SceneManager = {
 	totemMap : null,
 	heightmap : null,
 	placedTotems : null,
+	ownerMap : [],
+	ownerID : "none", // this is the client's owner ID ( serverside socket id )
 	
 	dirtyBlocks : [],
 	
@@ -65,6 +67,13 @@ SceneManager = {
 		var directionalLight = new THREE.DirectionalLight( 0xffffff );
 		directionalLight.position.set( 1, 0.75, 0.5 ).normalize();
 		this.scene.add( directionalLight );
+
+		for (let x = 0; x < 80; x++) {
+			this.ownerMap[x] = [];
+			for (let y = 0; y < 80; y++) {
+				this.ownerMap[x][y] = "none";
+			}
+		}
 	},
 	
 	build : function ( heightmap, totems ) {
@@ -76,9 +85,9 @@ SceneManager = {
 		
 		for (let x = 0; x < 80; x++) {
 			this.placedTotems[x] = [];
-		  for (let y = 0; y < 80; y++) {
-			  this.placedTotems[x][y] = 0;
-		  }
+			for (let y = 0; y < 80; y++) {
+				this.placedTotems[x][y] = 0;
+			}
 		}
 		
 		for ( let x = 0; x < 80; x++ ){
