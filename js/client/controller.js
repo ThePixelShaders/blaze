@@ -8,6 +8,17 @@ var HotBar = {
 	}
 }
 
+function checkIfTotemInRange( x, y, type, range ){
+	for ( let itx = x-range; itx <= x + range; itx++ ){
+		for ( let ity = y-range; ity <= y+ range; ity++ ){
+			if ( SceneManager.totemMap[itx][ity] == type ){
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 function onDocumentMouseMove( event ) {
 	event.preventDefault();
 	
@@ -47,12 +58,31 @@ function onDocumentMouseDown( event ) {
 		
 		var intersect = intersects[ 0 ];
 		
-		if ( isShiftDown ) {
+		if ( isShiftDown ) { // right click is pressed ( you are trying to dig )
 			let tX = ( intersect.object.position.x + 2125 ) / 50;
 			let tZ = ( intersect.object.position.z + 2125 ) / 50;
+
+
+			switch( SceneManager.totemMap[tX][tZ] ){
+				case TotemTypes.forest:
+					if ( checkIfTotemInRange(tX,tZ,TotemTypes.lumber1, 4) ){ // if there is a lumberjack nearby
+						// cut the forest
+
+						//ResourceManager.
+
+						SceneManager.removeTotem( tX, tZ, true );
+						socket.emit("removeTotem",tX,tZ);
+					}else {
+						// set warning that you're trying to cut forest too far away
+						additionalText.displayText("You're trying to cut a forest too far away from a lumberjack");
+					}
+					break;
+				default:
+					SceneManager.removeTotem( tX, tZ, true );
+					socket.emit("removeTotem",tX,tZ);
+			}
 			
-			SceneManager.removeTotem( tX, tZ, true );
-			socket.emit("removeTotem",tX,tZ);
+
 			
 		} else { // left click is pressed
 			let pos = new THREE.Vector3();
