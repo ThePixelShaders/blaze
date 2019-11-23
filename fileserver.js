@@ -4,6 +4,6 @@ const port = 80
 
 app.get('/helloworld', (req, res) => res.send('Hello World!'))
 
-app.use(express.static('public'))
+app.use(express.static('./'))
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
