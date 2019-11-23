@@ -143,6 +143,7 @@ function onDocumentMouseDown( event ) {
 					ResourceManager.getResourceCount(ResourceTypes.stone) >= 2)
 				{
 					SceneManager.addTotem( tX, tZ, totemtype );
+					socket.emit( "placeTotem", tX, tZ, totemtype );
 					//additionalText.displayText("You need ");
 					ResourceManager.setResourceCount(ResourceTypes.wood, ResourceManager.getResourceCount() - 4);
 					ResourceManager.setResourceCount(ResourceTypes.stone, ResourceManager.getResourceCount() - 2);
@@ -151,8 +152,9 @@ function onDocumentMouseDown( event ) {
 			else
 			{
 				SceneManager.addTotem( tX, tZ, totemtype );
+				socket.emit( "placeTotem", tX, tZ, totemtype );
 			}
-			socket.emit( "placeTotem", tX, tZ, totemtype );
+			
 		}
 	}
 }
