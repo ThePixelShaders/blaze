@@ -53,6 +53,12 @@ socket.on('mapseed', function(seed){
 	}
 });
 
+socket.on('setSpawnPoint', function( x, y ){
+	SceneManager.addTotem( x, y, TotemTypes.residential, true );
+	socket.emit( "placeTotem", x, y, TotemTypes.residential );
+	console.log("Spawnpoint set at " + x + ' ' + y );
+})
+
 
 socket.on('placeTotem', function(x,y,type){
 	SceneManager.addTotem( x, y, type, true );

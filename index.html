@@ -41,8 +41,8 @@
 			
 			#resourceScreen {
 				position: absolute;
-				top: 50px;
-				left: 45%;
+				bottom: 50px;
+				right: 5%;
 			}
 			#resourceScreen ul {
 				position: relative;
@@ -74,6 +74,50 @@
 				transform: translate(-200%, 75%);
 			}
 
+			#middle{
+				position: absolute; 
+				right: 0; 
+				margin-left: auto; 
+				margin-right: auto; 
+				width: 300px;
+				left: 0; 
+				top:25%;
+				
+			}
+			
+			.textArea
+			{
+				width: 100%;
+  				padding: 12px 20px;
+  				box-sizing: border-box;
+  				border: 2px solid #ccc;
+  				border-radius: 4px;
+  				background-color: #f8f8f8;
+  				resize: none;
+				
+			}
+
+			#middle div
+			{
+				text-align: center;
+				padding: 5%;
+				overflow: hidden;
+				background: #0f6600a8;
+				border-style: dashed;
+				border-width: 5px;
+				border-color: black;
+				color : white;
+			}
+			
+			#scoreboard{
+				position: absolute;
+				left: 20px;
+				top: 50px;
+			}
+
+			#scoreboard ul{
+				padding: 4px;
+			}
 
 			#hotbar{
 				position:absolute;
@@ -103,6 +147,12 @@
 				text-decoration: none;
 			}
 
+			#additionalText {
+				position: absolute;
+				bottom: 50px;
+				left: 5%;
+			}
+
 			.hotbar-box-active{
 				background-color: #36d61f9c;
 			}
@@ -115,28 +165,24 @@
 		<link href='css/index.css' rel='stylesheet' type='text/css'>
 
 		
-		<!--
-		<div class="wrapper">
-			<div class="login-block">
-				<h1>Login</h1>
-				<input type="text" value="" placeholder="Username" id="username" />
-				<input type="password" value="" placeholder="Password" id="password" />
-				<button>Submit</button>
+		<div id="middle">
+			<div class="ui-element">
+				<div class = "textArea">
+					<h1>Login</h1>
+				</div>
+				<div class = "textArea">
+					<input type="text" value="" placeholder="Username" id="username" />
+				</div>
+				<div class = "textArea">
+					<button>Submit</button>
+				</div>
 			</div>
 		</div>
-		-->
 		
+		<div id="additionalText" class="ui-element">
+		</div>
+
 		<div id="resourceScreen" class="ui-element">
-			<!--<img src="textures/Log.png" alt="Unable to load image" style="max-width:50px; max-height: 50px;"/> <span id="res_wood">0</span>
-			<img src="textures/Log.png" alt="Unable to load image" style="max-width:50px; padding-left: 35px; max-height: 50px;"/> <span id="res_stone">0</span>
-			<img src="textures/Log.png" alt="Unable to load image" style="max-width:50px; padding-left: 35px; max-height: 50px;"/> <span id="res_petrol">0</span>
-			<span style="padding-left:20px"></span>-->
-
-
-			<!--<div class="res_container">
-				<img src="textures/Log.png" alt="Unable to load image" style="max-width:50px; max-height:50px"/>
-				<span id="res_wood">69</span>
-			</div>-->
 
 			<ul>
 				<li>
@@ -147,7 +193,7 @@
 				</li>
 				<li>
 					<div>
-						<img src="textures/Log.png" alt="Unable to load image" style="max-width:50px; max-height:50px"/>
+						<img src="textures/stoneUI.png" alt="Unable to load image" style="max-width:50px; max-height:50px"/>
 						<span id="res_stone">42</span>
 					</div>
 				</li>
@@ -191,6 +237,8 @@
 
 		</div>
 		
+		<div id="scoreboard">
+		</div>
 
 		<div id="info">
 		</div>
@@ -207,6 +255,8 @@
 		<script src="js/GLTFLoader.js"></script>
 		<script src="js/shared/perlinnoise.js"></script>
 		<script src="js/shared/terraingenerator.js"></script>
+		<script src="js/client/scoreboard.js"></script>
+		<script src="js/client/additionalText.js"></script>
 		<script src="js/client/totemloader.js"></script>
 		<script src="js/client/scenemanager.js"></script>
 		<script src="js/client/controller.js"></script>
