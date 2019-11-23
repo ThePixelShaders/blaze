@@ -104,6 +104,26 @@ function onDocumentKeyDown( event ) {
 		case 82: /*R*/ this.moveUp = true; break;
 		case 70: /*F*/ this.moveDown = true; break;
 
+		case 49: /*1*/ 
+			$("li.hotbar-box-active").removeClass("hotbar-box-active");
+			$("li#hotbar-box1").addClass("hotbar-box-active");
+		break;
+		case 50: /*2*/ 
+			$("li.hotbar-box-active").removeClass("hotbar-box-active");
+			$("li#hotbar-box2").addClass("hotbar-box-active");
+		break;
+		case 51: /*3*/ 
+			$("li.hotbar-box-active").removeClass("hotbar-box-active");
+			$("li#hotbar-box3").addClass("hotbar-box-active");
+		break;
+		case 52: /*4*/ 
+			$("li.hotbar-box-active").removeClass("hotbar-box-active");
+			$("li#hotbar-box4").addClass("hotbar-box-active");
+		break;
+		case 53: /*5*/ 
+			$("li.hotbar-box-active").removeClass("hotbar-box-active");
+			$("li#hotbar-box5").addClass("hotbar-box-active");
+		break;
 	}
 
 }
