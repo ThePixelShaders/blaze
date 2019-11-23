@@ -25,12 +25,33 @@ var totemMap = []; // a clone of the initial, the initial one is left unaltered 
 // note : The generator can recompute amy specific tile, but caching is faster
 // if ram explodes, switch to computing each tile every time
 
+var ownerMap = []; // world-size matrix to keep track of ownerships
+
 var deltaBuffer = []; // delta data for people that join later, useful for spectate mode
+
+var OwnershipManager = {
+	ownerIDCounter : 1,
+	owners: {},
+	reverseOwners: {},
+
+	getOwnerFromID : function( socketID ){
+		return owners[socketID];
+	},
+
+	registerOwner : function ( socketID ){
+		this.owners[socketID] = ownerIDCounter;
+		this.reverseOwners[this.ownerIDCounter] = socketID;
+		this.ownerIDCounter += 1;
+		return this.owners[socketID];
+	}
+}
 
 for ( let x = 0; x < Generator.WORLD_WIDTH; x++ ){
 	totemMap[x] = [];
+	ownerMap[x] = [];
 	for ( let y = 0; y < Generator.WORLD_HEIGHT; y++ ){
 		totemMap[x][y] = initialTotemMap[x][y];
+		ownerMap[x][y]= "none";
 	}
 }
 
@@ -65,18 +86,19 @@ var SpawnManager = {
 
 		return spawnpoint;
 	}
-
 }
 
 SpawnManager.computeAvailableSpaces();
 
 // Some sort of getters and setters for the map, that compute deltas
-function placeTotem( x, y, type ){
+function placeTotem( x, y, type, owner ){ // owner will be the socketID
 	totemMap[x][y] = type;
 	deltaBuffer = deltaBuffer.filter(function (entry) { return  !(entry.x == x && entry.y == y); });
+
+
 	
 	if ( initialTotemMap[x][y] != totemMap[x][y] ){
-		deltaBuffer.push( {x:x,y:y,type:type} );
+		deltaBuffer.push( {x:x,y:y,type:type, owner:owner} );
 	}
 	//console.log(deltaBuffer);
 }
@@ -124,7 +146,7 @@ io.on('connection', function(socket){
 	
 	socket.on('placeTotem', function(x,y,type){
 		//console.log("placed totem " + type + " at coords : " + x + " " + y);
-		placeTotem(x,y,type);
+		placeTotem( x, y,type, socket.id );
 		socket.broadcast.emit('placeTotem',x,y,type);
 	});
 	
