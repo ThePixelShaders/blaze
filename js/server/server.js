@@ -11,6 +11,10 @@ var Generator = require("../shared/terraingenerator.js")
 
 admin.notify("Server booted");
 
+
+// WARNING : HARDCODED TO MATCH THE CLIENT VALUE
+var waterlevel = 202;
+
 // For serverside checks
 console.log("Generating terrain...");
 var heightmap = Generator.generateTerrain(mapseed);
@@ -33,7 +37,7 @@ for ( let x = 0; x < Generator.WORLD_WIDTH; x++ ){
 // This objects holds data about the available places on the map, for spawning
 var SpawnManager = {
 	maximumLevelDifference: 30, // Maximum level difference between water level and possible spawn locations
-	waterLevelOffset = 5, // ( starting from waterLevel + waterLevelOffset, people can spawn ) ( keeps some distance from the actual water )
+	waterLevelOffset: 5, // ( starting from waterlevel + waterLevelOffset, people can spawn ) ( keeps some distance from the actual water )
 
 	availableSpaces: [], // available places ( as coordinates x/y )
 
@@ -43,7 +47,7 @@ var SpawnManager = {
 		for ( let x = 0; x < Generator.WORLD_WIDTH; x++ ){
 			for ( let y = 0; y < Generator.WORLD_HEIGHT; y++ ){
 				// if the current tile is between the minimum and maximum water levels, people can spawn there
-				if ( heightmap[x][y] > waterLevel + this.waterLevelOffset && heightmap[x][y] < waterLevel + this.maximumLevelDifference + this.waterLevelOffset ){
+				if ( heightmap[x][y] > waterlevel + this.waterLevelOffset && heightmap[x][y] < waterlevel + this.maximumLevelDifference + this.waterLevelOffset ){
 					this.availableSpaces.push( { x: x, y: y } );
 				}
 			}
@@ -105,6 +109,10 @@ io.on('connection', function(socket){
 	socket.on('requestseed', function(msg){
 		console.log("Serving seed");
 		socket.emit('mapseed', mapseed);
+
+		let newpoint = SpawnManager.dispatchSpawnPoint();
+		socket.emit('setSpawnPoint', newpoint.x, newpoint.y );
+		console.log("Requested spawnpoint at " + newpoint.x + ' ' + newpoint.y );
 	});
 	
 	socket.on('requestdeltas', function(){
