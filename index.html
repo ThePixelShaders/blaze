@@ -64,14 +64,22 @@
 			#res_wood {
 				position: absolute;
 				transform: translate(-200%, 75%);
+				text-shadow: 1px -1px 8px white;
 			}
 			#res_stone {
 				position: absolute;
 				transform: translate(-200%, 75%);
+				text-shadow: 1px -1px 8px white;
+			}
+			#res_iron {
+				position: absolute;
+				transform: translate(-200%, 75%);
+				text-shadow: 1px -1px 8px white;
 			}
 			#res_petrol {
 				position: absolute;
 				transform: translate(-200%, 75%);
+				text-shadow: 1px -1px 8px white;
 			}
 
 			#middle{
@@ -121,19 +129,19 @@
 
 			#hotbar{
 				position:absolute;
-				margin-left: auto; 
-				margin-right: auto;
-				left: 0;
-				right: 0; 
-				width: 60%;
-				bottom: 6px;
+				/* bottom: 10px;
+				left:37%; */
+   				left: 50%; /* position the left edge of the element at the middle of the parent */
+				bottom: 5px;
+				transform: translate(-46%, -16%);
+
 			}
 
 			.ui-element{
 				margin: 0;
 				padding: 0;
 				overflow: hidden;
-				background: #0f6600a8;
+				background: #0f6600e6;
 				border-style: dashed;
 				border-width: 5px;
 				border-color: black;
@@ -150,6 +158,8 @@
 				padding-top: 4px;
 				padding-left: 4px;
 				padding-right: 4px;
+				padding-bottom: 0; 
+				margin-bottom: 0;
 				text-decoration: none;
 			}
 
@@ -202,19 +212,25 @@
 			<ul>
 				<li>
 					<div>
-						<img src="textures/Log.png" alt="Unable to load image" style="max-width:50px; max-height:50px"/>
+						<img src="textures/Log.png" alt="Unable to load image" style="width:50px; height:50px"/>
 						<span id="res_wood" style="color:black;">0</span>
 					</div>
 				</li>
 				<li>
 					<div>
-						<img src="textures/stoneUI.png" alt="Unable to load image" style="max-width:50px; max-height:50px"/>
+						<img src="textures/stoneUI.png" alt="Unable to load image" style="width:50px; height:50px"/>
 						<span id="res_stone" style="color:black;">0</span>
 					</div>
 				</li>
 				<li>
 					<div>
-						<img src="textures/Log.png" alt="Unable to load image" style="max-width:50px; max-height:50px"/>
+						<img src="textures/Iron.png" alt="Unable to load image" style="max-width:50px; max-height:50px"/>
+						<span id="res_iron" style="color:black;">0</span>
+					</div>
+				</li>
+				<li>
+					<div>
+						<img src="textures/Petrol.png" alt="Unable to load image" style="max-width:50px; max-height:50px"/>
 						<span id="res_petrol" style="color:black;">0</span>
 					</div>
 				</li>
@@ -236,24 +252,32 @@
 			<!-- <input id="hotbar-input"  onkeydown="hotbar()"> -->
 
 			<ul class="ui-element">
-				<li id="hotbar-box1" class="hotbar-box-active"><img src="images/townhall.png" style="max-width: 50px; max-height: 50px;">
-					<p>Townhall</p>
+				<li id="hotbar-box1" class="hotbar-box-active"><img src="textures/house-icon.png" style="width: 50px; height: 50px;">
+					<p>House</p>
 				</li>
 
-				<li id="hotbar-box2"><img src="images/townhall.png" style="max-width: 50px; max-height: 50px;">
-					<p>Townhall</p>
+				<li id="hotbar-box2"><img src="textures/lumberjack-icon.png" style="width: 50px; height: 50px;">
+					<p>Lumberjack</p>
 				</li>
 
-				<li id="hotbar-box3"><img src="images/townhall.png" style="max-width: 50px; max-height: 50px;">
-					<p>Townhall</p>
+				<li id="hotbar-box3"><img src="textures/mine-icon.png" style="width: 50px; height: 50px;">
+					<p>Mine</p>
 				</li>
 
-				<li id="hotbar-box4"><img src="images/townhall.png" style="max-width: 50px; max-height: 50px;">
-					<p>Townhall</p>
+				<li id="hotbar-box4"><img src="textures/oil-well-icon.png" style="width: 50px; height: 50px;">
+					<p>Oil well</p>
 				</li>
 
-				<li id="hotbar-box5"><img src="images/townhall.png" style="max-width: 50px; max-height: 50px;">
-					<p>Townhall</p>
+				<li id="hotbar-box5"><img src="textures/factory-icon.png" style="width: 50px; height: 50px;">
+					<p>Factory</p>
+				</li>
+
+				<li id="hotbar-box6"><img src="textures/cannon-icon.png" style="width: 50px; height: 50px;">
+					<p>Cannon</p>
+				</li>
+
+				<li id="hotbar-box7"><img src="textures/tower-icon.png" style="width: 50px; height: 50px;">
+					<p>Tower</p>
 				</li>
 			</ul>
 
