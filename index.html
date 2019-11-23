@@ -43,13 +43,6 @@
 				position: absolute;
 				top: 50px;
 				left: 45%;
-				background: #106600aa;
-				border-style: dashed;
-				border-width: 5px;
-				border-color: black;
-				color : white;
-				text-shadow: 2px 2px #000000;
-				vertical-align: middle;
 			}
 			#resourceScreen ul {
 				position: relative;
@@ -88,16 +81,18 @@
 				bottom: 6px;
 			}
 
-			#hotbar ul{
-				list-style-type: none;
+			.ui-element{
 				margin: 0;
 				padding: 0;
 				overflow: hidden;
-				background: #0f6600;
+				background: #0f6600a8;
 				border-style: dashed;
 				border-width: 5px;
 				border-color: black;
 				color : white;
+			}
+			#hotbar ul{
+				list-style-type: none;
 			}
 			#hotbar ul li{
 				float: left;
@@ -131,7 +126,7 @@
 		</div>
 		-->
 		
-		<div id="resourceScreen">
+		<div id="resourceScreen" class="ui-element">
 			<!--<img src="textures/Log.png" alt="Unable to load image" style="max-width:50px; max-height: 50px;"/> <span id="res_wood">0</span>
 			<img src="textures/Log.png" alt="Unable to load image" style="max-width:50px; padding-left: 35px; max-height: 50px;"/> <span id="res_stone">0</span>
 			<img src="textures/Log.png" alt="Unable to load image" style="max-width:50px; padding-left: 35px; max-height: 50px;"/> <span id="res_petrol">0</span>
@@ -172,7 +167,7 @@
 			
 			<!-- <input id="hotbar-input"  onkeydown="hotbar()"> -->
 
-			<ul>
+			<ul class="ui-element">
 				<li id="hotbar-box1" class="hotbar-box-active"><img src="images/townhall.png" style="max-width: 50px; max-height: 50px;">
 					<p>Townhall</p>
 				</li>
@@ -212,6 +207,7 @@
 		<script src="js/GLTFLoader.js"></script>
 		<script src="js/shared/perlinnoise.js"></script>
 		<script src="js/shared/terraingenerator.js"></script>
+		<script src="js/client/scoreboard.js"></script>
 		<script src="js/client/totemloader.js"></script>
 		<script src="js/client/scenemanager.js"></script>
 		<script src="js/client/controller.js"></script>
