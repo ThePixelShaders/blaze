@@ -45,25 +45,6 @@ var ResourceManager = {
         }
     },
 
-    getResourceCount : function (type)
-    {
-        switch( type ){
-            case ResourceTypes.wood:
-                return this.resources[ResourceTypes.wood];
-                break;
-            case ResourceTypes.stone:
-                return this.resources[ResourceTypes.stone];
-                break;
-            case ResourceTypes.metal:
-                return this.resources[ResourceTypes.metal];
-                break;
-            case ResourceTypes.petrol:
-                return this.resources[ResourceTypes.petrol];
-                break;
-        }
-        return 0;
-    },
-
     getResourceCount : function ( type ){
         return this.resources[type];
     }
