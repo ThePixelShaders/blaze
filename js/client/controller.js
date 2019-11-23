@@ -36,6 +36,19 @@ function onDocumentMouseMove( event ) {
 		
 		let tX = ( pos.x + 2125 ) / 50;
 		let tZ = ( pos.z + 2125 ) / 50;
+
+		//selectionCylinder.material.color.setHex(0xff0000);
+
+		//console.log(tX + ' ' + tZ )
+
+		if ( SceneManager.ownerMap[tX][tZ] == "none" ){
+			selectionCylinder.material.color.setHex(0xff0000);
+		}else{
+			let own = SceneManager.ownerMap[tX][tZ];
+			console.log(SceneManager.ownerMap);
+			debugger;
+			selectionCylinder.material.color.setHex(0x00ff00);
+		}
 		
 		selectionCylinder.position.set(pos.x,heightmap[tX][tZ]+30,pos.z);
 	}
@@ -176,7 +189,16 @@ function onDocumentKeyDown( event ) {
 			$("li#hotbar-box5").addClass("hotbar-box-active");
 			HotBar.currentActive = 5;
 		break;
-	
+		case 54: /*6*/ 
+			$("li.hotbar-box-active").removeClass("hotbar-box-active");
+			$("li#hotbar-box6").addClass("hotbar-box-active");
+			HotBar.currentActive = 6;
+		break;
+		case 55: /*7*/ 
+			$("li.hotbar-box-active").removeClass("hotbar-box-active");
+			$("li#hotbar-box7").addClass("hotbar-box-active");
+			HotBar.currentActive = 7;
+		break;
 	}
 
 }
