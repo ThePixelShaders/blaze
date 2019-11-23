@@ -40,14 +40,17 @@ function onDocumentMouseMove( event ) {
 		//selectionCylinder.material.color.setHex(0xff0000);
 
 		//console.log(tX + ' ' + tZ )
-
 		if ( SceneManager.ownerMap[tX][tZ] == "none" ){
-			selectionCylinder.material.color.setHex(0xff0000);
-		}else{
-			let own = SceneManager.ownerMap[tX][tZ];
-			console.log(SceneManager.ownerMap);
-			debugger;
+			//let own = SceneManager.ownerMap;
+			//debugger;
+			selectionCylinder.material.color.setHex(0xffff00);
+		}else if ( SceneManager.ownerMap[tX][tZ] == SceneManager.ownerID ){
+			//let own = SceneManager.ownerMap[tX][tZ];
+			//console.log(SceneManager.ownerMap);
+			//debugger;
 			selectionCylinder.material.color.setHex(0x00ff00);
+		}else{
+			selectionCylinder.material.color.setHex(0xff0000);
 		}
 		
 		selectionCylinder.position.set(pos.x,heightmap[tX][tZ]+30,pos.z);
