@@ -11,6 +11,10 @@ var Generator = require("../shared/terraingenerator.js")
 
 admin.notify("Server booted");
 
+
+// WARNING : HARDCODED TO MATCH THE CLIENT VALUE
+var waterlevel = 202;
+
 // For serverside checks
 console.log("Generating terrain...");
 var heightmap = Generator.generateTerrain(mapseed);
@@ -21,19 +25,40 @@ var totemMap = []; // a clone of the initial, the initial one is left unaltered 
 // note : The generator can recompute amy specific tile, but caching is faster
 // if ram explodes, switch to computing each tile every time
 
+var ownerMap = []; // world-size matrix to keep track of ownerships
+
 var deltaBuffer = []; // delta data for people that join later, useful for spectate mode
+
+var OwnershipManager = {
+	ownerIDCounter : 1,
+	owners: {},
+	reverseOwners: {},
+
+	getOwnerFromID : function( socketID ){
+		return owners[socketID];
+	},
+
+	registerOwner : function ( socketID ){
+		this.owners[socketID] = ownerIDCounter;
+		this.reverseOwners[this.ownerIDCounter] = socketID;
+		this.ownerIDCounter += 1;
+		return this.owners[socketID];
+	}
+}
 
 for ( let x = 0; x < Generator.WORLD_WIDTH; x++ ){
 	totemMap[x] = [];
+	ownerMap[x] = [];
 	for ( let y = 0; y < Generator.WORLD_HEIGHT; y++ ){
 		totemMap[x][y] = initialTotemMap[x][y];
+		ownerMap[x][y]= "none";
 	}
 }
 
 // This objects holds data about the available places on the map, for spawning
 var SpawnManager = {
 	maximumLevelDifference: 30, // Maximum level difference between water level and possible spawn locations
-	waterLevelOffset = 5, // ( starting from waterLevel + waterLevelOffset, people can spawn ) ( keeps some distance from the actual water )
+	waterLevelOffset: 5, // ( starting from waterlevel + waterLevelOffset, people can spawn ) ( keeps some distance from the actual water )
 
 	availableSpaces: [], // available places ( as coordinates x/y )
 
@@ -43,7 +68,7 @@ var SpawnManager = {
 		for ( let x = 0; x < Generator.WORLD_WIDTH; x++ ){
 			for ( let y = 0; y < Generator.WORLD_HEIGHT; y++ ){
 				// if the current tile is between the minimum and maximum water levels, people can spawn there
-				if ( heightmap[x][y] > waterLevel + this.waterLevelOffset && heightmap[x][y] < waterLevel + this.maximumLevelDifference + this.waterLevelOffset ){
+				if ( heightmap[x][y] > waterlevel + this.waterLevelOffset && heightmap[x][y] < waterlevel + this.maximumLevelDifference + this.waterLevelOffset ){
 					this.availableSpaces.push( { x: x, y: y } );
 				}
 			}
@@ -61,18 +86,19 @@ var SpawnManager = {
 
 		return spawnpoint;
 	}
-
 }
 
 SpawnManager.computeAvailableSpaces();
 
 // Some sort of getters and setters for the map, that compute deltas
-function placeTotem( x, y, type ){
+function placeTotem( x, y, type, owner ){ // owner will be the socketID
 	totemMap[x][y] = type;
 	deltaBuffer = deltaBuffer.filter(function (entry) { return  !(entry.x == x && entry.y == y); });
+
+
 	
 	if ( initialTotemMap[x][y] != totemMap[x][y] ){
-		deltaBuffer.push( {x:x,y:y,type:type} );
+		deltaBuffer.push( {x:x,y:y,type:type, owner:owner} );
 	}
 	//console.log(deltaBuffer);
 }
@@ -105,6 +131,10 @@ io.on('connection', function(socket){
 	socket.on('requestseed', function(msg){
 		console.log("Serving seed");
 		socket.emit('mapseed', mapseed);
+
+		let newpoint = SpawnManager.dispatchSpawnPoint();
+		socket.emit('setSpawnPoint', newpoint.x, newpoint.y );
+		console.log("Requested spawnpoint at " + newpoint.x + ' ' + newpoint.y );
 	});
 	
 	socket.on('requestdeltas', function(){
@@ -116,7 +146,7 @@ io.on('connection', function(socket){
 	
 	socket.on('placeTotem', function(x,y,type){
 		//console.log("placed totem " + type + " at coords : " + x + " " + y);
-		placeTotem(x,y,type);
+		placeTotem( x, y,type, socket.id );
 		socket.broadcast.emit('placeTotem',x,y,type);
 	});
 	
