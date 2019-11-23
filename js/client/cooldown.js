@@ -42,22 +42,23 @@ function setCooldown(time, string)
     interval = setInterval(() => {
         let a = getCooldown();
         setTime((Math.floor(a/1000)));
-        setProgressbar(getCooldownPercent());
+        setProgressbar(getCooldownPercent(), string);
         if(getCooldown()==0)
         {
+            actionText.innerHTML = "";
             isCooldownReadyBool = true;
             setTime(0);
             clearInterval(interval);
         }
         //clearInterval
     }, 100);
-
+    
 }
 
 
 function setProgressbar(value, text){
 
-    actionText.hidden = false;
+    // actionText.hidden = false;
     actionText.innerHTML = text;
 
     value *= 100;
