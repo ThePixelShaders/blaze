@@ -1,3 +1,24 @@
+var HotBar = {
+	currentActive : 1,
+	hotbarMapping : [ TotemTypes.empty, TotemTypes.house1, TotemTypes.lumber1, TotemTypes.mine, TotemTypes.petrol, TotemTypes.nuclearplant, TotemTypes.cannon, TotemTypes.settlement ],
+
+	// this returns a TotemType
+	getCurrentActive : function(){
+		return this.hotbarMapping [ this.currentActive ];
+	}
+}
+
+function checkIfTotemInRange( x, y, type, range ){
+	for ( let itx = x-range; itx <= x + range; itx++ ){
+		for ( let ity = y-range; ity <= y+ range; ity++ ){
+			if ( SceneManager.totemMap[itx][ity] == type ){
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 function onDocumentMouseMove( event ) {
 	event.preventDefault();
 	
@@ -37,14 +58,33 @@ function onDocumentMouseDown( event ) {
 		
 		var intersect = intersects[ 0 ];
 		
-		if ( isShiftDown ) {
+		if ( isShiftDown ) { // right click is pressed ( you are trying to dig )
 			let tX = ( intersect.object.position.x + 2125 ) / 50;
 			let tZ = ( intersect.object.position.z + 2125 ) / 50;
+
+
+			switch( SceneManager.totemMap[tX][tZ] ){
+				case TotemTypes.forest:
+					if ( checkIfTotemInRange(tX,tZ,TotemTypes.lumber1, 4) ){ // if there is a lumberjack nearby
+						// cut the forest
+
+						//ResourceManager.
+
+						SceneManager.removeTotem( tX, tZ, true );
+						socket.emit("removeTotem",tX,tZ);
+					}else {
+						// set warning that you're trying to cut forest too far away
+						additionalText.displayText("You're trying to cut a forest too far away from a lumberjack");
+					}
+					break;
+				default:
+					SceneManager.removeTotem( tX, tZ, true );
+					socket.emit("removeTotem",tX,tZ);
+			}
 			
-			SceneManager.removeTotem( tX, tZ, true );
-			socket.emit("removeTotem",tX,tZ);
+
 			
-		} else {
+		} else { // left click is pressed
 			let pos = new THREE.Vector3();
 			pos.copy( intersect.point ).add( intersect.face.normal );
 			pos.divideScalar( 50 ).floor().multiplyScalar( 50 ).addScalar( 25 );
@@ -64,9 +104,11 @@ function onDocumentMouseDown( event ) {
 				SceneManager.addTotem( tX, tZ, TotemTypes.residential, true );
 				socket.emit( "placeTotem", tX, tZ, TotemTypes.residential );
 			}*/
+
+			let totemtype = HotBar.getCurrentActive();
 			
-			SceneManager.addTotem( tX, tZ, TotemTypes.cannon );
-			socket.emit( "placeTotem", tX, tZ, TotemTypes.cannon);
+			SceneManager.addTotem( tX, tZ, totemtype );
+			socket.emit( "placeTotem", tX, tZ, totemtype );
 		}
 	}
 }
@@ -76,6 +118,8 @@ var isRightDown = false;
 var isUpDown = false; // very inspiring, what can i say
 var isDownDown = false;
 var isShiftDown = false;
+
+
 
 function onDocumentKeyDown( event ) {
 	switch ( event.keyCode ) {
@@ -110,22 +154,27 @@ function onDocumentKeyDown( event ) {
 		case 49: /*1*/ 
 			$("li.hotbar-box-active").removeClass("hotbar-box-active");
 			$("li#hotbar-box1").addClass("hotbar-box-active");
+			HotBar.currentActive = 1;
 		break;
 		case 50: /*2*/ 
 			$("li.hotbar-box-active").removeClass("hotbar-box-active");
 			$("li#hotbar-box2").addClass("hotbar-box-active");
+			HotBar.currentActive = 2;
 		break;
 		case 51: /*3*/ 
 			$("li.hotbar-box-active").removeClass("hotbar-box-active");
 			$("li#hotbar-box3").addClass("hotbar-box-active");
+			HotBar.currentActive = 3;
 		break;
 		case 52: /*4*/ 
 			$("li.hotbar-box-active").removeClass("hotbar-box-active");
 			$("li#hotbar-box4").addClass("hotbar-box-active");
+			HotBar.currentActive = 4;
 		break;
 		case 53: /*5*/ 
 			$("li.hotbar-box-active").removeClass("hotbar-box-active");
 			$("li#hotbar-box5").addClass("hotbar-box-active");
+			HotBar.currentActive = 5;
 		break;
 	
 	}

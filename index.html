@@ -41,8 +41,8 @@
 			
 			#resourceScreen {
 				position: absolute;
-				bottom: 50px;
-				right: 5%;
+				bottom: 20px;
+				right: 10px;
 			}
 			#resourceScreen ul {
 				position: relative;
@@ -112,7 +112,7 @@
 			#scoreboard{
 				position: absolute;
 				left: 20px;
-				top: 50px;
+				top: 100px;
 			}
 
 			#scoreboard ul{
@@ -121,7 +121,11 @@
 
 			#hotbar{
 				position:absolute;
-				left :37%;
+				margin-left: auto; 
+				margin-right: auto;
+				left: 0;
+				right: 0; 
+				width: 60%;
 				bottom: 6px;
 			}
 
@@ -143,7 +147,9 @@
 				display: block;
 				color: white;
 				text-align: center;
-				padding: 14px 16px;
+				padding-top: 4px;
+				padding-left: 4px;
+				padding-right: 4px;
 				text-decoration: none;
 			}
 
@@ -156,6 +162,15 @@
 			.hotbar-box-active{
 				background-color: #36d61f9c;
 			}
+
+			#clock
+			{
+				position: absolute;
+				top: 20px;
+				left: 10px;
+				border: none;
+			}
+
 		</style>
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -165,7 +180,7 @@
 		<link href='css/index.css' rel='stylesheet' type='text/css'>
 
 		
-		<div id="middle">
+		<div id="middle" hidden>
 			<div class="ui-element">
 				<div class = "textArea">
 					<h1>Login</h1>
@@ -188,19 +203,19 @@
 				<li>
 					<div>
 						<img src="textures/Log.png" alt="Unable to load image" style="max-width:50px; max-height:50px"/>
-						<span id="res_wood">32</span>
+						<span id="res_wood" style="color:black;">0</span>
 					</div>
 				</li>
 				<li>
 					<div>
 						<img src="textures/stoneUI.png" alt="Unable to load image" style="max-width:50px; max-height:50px"/>
-						<span id="res_stone">42</span>
+						<span id="res_stone" style="color:black;">0</span>
 					</div>
 				</li>
 				<li>
 					<div>
 						<img src="textures/Log.png" alt="Unable to load image" style="max-width:50px; max-height:50px"/>
-						<span id="res_petrol">52</span>
+						<span id="res_petrol" style="color:black;">0</span>
 					</div>
 				</li>
 			</ul>
@@ -208,6 +223,13 @@
 
 
 		</div>
+
+		<div id = "clock" style="border: none">
+				<div class = "ui-element" style="border: none; padding: 10px;">
+						1:0
+				</div>
+		</div>
+	
 
 		<div id="hotbar">
 			
@@ -237,7 +259,7 @@
 
 		</div>
 		
-		<div id="scoreboard">
+		<div id="scoreboard" style="border: none; padding: 10px;">
 		</div>
 
 		<div id="info">
