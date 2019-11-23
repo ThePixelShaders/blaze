@@ -36,6 +36,19 @@ function onDocumentMouseMove( event ) {
 		
 		let tX = ( pos.x + 2125 ) / 50;
 		let tZ = ( pos.z + 2125 ) / 50;
+
+		//selectionCylinder.material.color.setHex(0xff0000);
+
+		//console.log(tX + ' ' + tZ )
+
+		if ( SceneManager.ownerMap[tX][tZ] == "none" ){
+			selectionCylinder.material.color.setHex(0xff0000);
+		}else{
+			let own = SceneManager.ownerMap[tX][tZ];
+			console.log(SceneManager.ownerMap);
+			debugger;
+			selectionCylinder.material.color.setHex(0x00ff00);
+		}
 		
 		selectionCylinder.position.set(pos.x,heightmap[tX][tZ]+30,pos.z);
 	}
