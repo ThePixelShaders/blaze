@@ -112,7 +112,7 @@
 			#scoreboard{
 				position: absolute;
 				left: 20px;
-				top: 50px;
+				top: 100px;
 			}
 
 			#scoreboard ul{
@@ -162,6 +162,15 @@
 			.hotbar-box-active{
 				background-color: #36d61f9c;
 			}
+
+			#clock
+			{
+				position: absolute;
+				top: 20px;
+				left: 10px;
+				border: none;
+			}
+
 		</style>
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -215,6 +224,13 @@
 
 		</div>
 
+		<div id = "clock" style="border: none">
+				<div class = "ui-element" style="border: none; padding: 10px;">
+						1:0
+				</div>
+		</div>
+	
+
 		<div id="hotbar">
 			
 			<!-- <input id="hotbar-input"  onkeydown="hotbar()"> -->
@@ -243,7 +259,7 @@
 
 		</div>
 		
-		<div id="scoreboard">
+		<div id="scoreboard" style="border: none; padding: 10px;">
 		</div>
 
 		<div id="info">

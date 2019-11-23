@@ -35,6 +35,8 @@ function renderScoreBoard(){
 
     ul.classList.add("ui-element");
 
+    ul.style = "border: none; padding: 10px;";
+
     scoreboard.getScoreBoard().forEach( item => {
         console.log(item[0]);
         var li = document.createElement("li");
