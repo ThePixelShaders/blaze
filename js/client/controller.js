@@ -88,10 +88,24 @@ function onDocumentMouseDown( event ) {
 
 						SceneManager.removeTotem( tX, tZ, true );
 						socket.emit("removeTotem",tX,tZ);
+
+						var woodCount = ResourceManager.getResourceCount(ResourceTypes.wood);
+						woodCount = woodCount + Math.floor(Math.random() * 2) + 4;
+						ResourceManager.setResourceCount(ResourceTypes.wood, woodCount);
 					}else {
 						// set warning that you're trying to cut forest too far away
 						additionalText.displayText("You're trying to cut a forest too far away from a lumberjack");
 					}
+					break;
+				case TotemTypes.rocky:
+
+					SceneManager.removeTotem( tX, tZ, true );
+					socket.emit("removeTotem",tX,tZ);
+
+					var woodCount = ResourceManager.getResourceCount(ResourceTypes.wood);
+					woodCount = woodCount + Math.floor(Math.random() * 4) + 6;
+					ResourceManager.setResourceCount(ResourceTypes.wood, woodCount);
+
 					break;
 				default:
 					SceneManager.removeTotem( tX, tZ, true );
@@ -123,7 +137,21 @@ function onDocumentMouseDown( event ) {
 
 			let totemtype = HotBar.getCurrentActive();
 			
-			SceneManager.addTotem( tX, tZ, totemtype );
+			if (totemtype == TotemTypes.lumber1)
+			{
+				if (ResourceManager.getResourceCount(ResourceTypes.wood) >= 4 &&
+					ResourceManager.getResourceCount(ResourceTypes.stone) >= 2)
+				{
+					SceneManager.addTotem( tX, tZ, totemtype );
+					//additionalText.displayText("You need ");
+					ResourceManager.setResourceCount(ResourceTypes.wood, ResourceManager.getResourceCount() - 4);
+					ResourceManager.setResourceCount(ResourceTypes.stone, ResourceManager.getResourceCount() - 2);
+				}
+			}
+			else
+			{
+				SceneManager.addTotem( tX, tZ, totemtype );
+			}
 			socket.emit( "placeTotem", tX, tZ, totemtype );
 		}
 	}
