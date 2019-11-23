@@ -16,6 +16,8 @@ var TotemTypes = {
 	house1 : 9,
 	lumber1 : 10,
 	cannon: 11,
+	lumber2 : 12,
+	house2: 13,
 };
 
 

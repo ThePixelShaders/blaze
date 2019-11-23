@@ -1,6 +1,7 @@
 let isCooldownReadyBool = true;
 let interval;
-
+let progressbar = document.getElementById("progress-bar");
+let actionText = document.getElementById("action-text");
 let initialTime = 0;
 let finishTime = 0;
 
@@ -41,15 +42,26 @@ function setCooldown(time, string)
     interval = setInterval(() => {
         let a = getCooldown();
         setTime((Math.floor(a/1000)));
+        setProgressbar(getCooldownPercent(), string);
         if(getCooldown()==0)
         {
+            actionText.innerHTML = "";
             isCooldownReadyBool = true;
             setTime(0);
             clearInterval(interval);
         }
         //clearInterval
     }, 100);
-
+    
 }
 
-setCooldown(1000, "Ț");
+
+function setProgressbar(value, text){
+
+    // actionText.hidden = false;
+    actionText.innerHTML = text;
+
+    value *= 100;
+    value += "%";
+    progressbar.style.width = value;
+}
