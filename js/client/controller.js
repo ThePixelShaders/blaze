@@ -65,8 +65,8 @@ function onDocumentMouseDown( event ) {
 				socket.emit( "placeTotem", tX, tZ, TotemTypes.residential );
 			}*/
 			
-			SceneManager.addTotem( tX, tZ, TotemTypes.launchsite );
-			socket.emit( "placeTotem", tX, tZ, TotemTypes.launchsite );
+			SceneManager.addTotem( tX, tZ, TotemTypes.lumber1 );
+			socket.emit( "placeTotem", tX, tZ, TotemTypes.lumber1 );
 		}
 	}
 }
@@ -99,10 +99,13 @@ function onDocumentKeyDown( event ) {
 		case 39: /*right*/
 		case 68: /*D*/
 			isRightDown = true;
+			scoreboard.addScore("vasile", 420);
 		break;
 
-		case 82: /*R*/ this.moveUp = true; break;
-		case 70: /*F*/ this.moveDown = true; break;
+		case 82: /*R*/ this.moveUp = true;
+		renderScoreBoard(); break;
+		case 70: /*F*/ this.moveDown = true;
+		scoreboard.addScore("ion", 69); break;
 
 		case 49: /*1*/ 
 			$("li.hotbar-box-active").removeClass("hotbar-box-active");
@@ -124,6 +127,7 @@ function onDocumentKeyDown( event ) {
 			$("li.hotbar-box-active").removeClass("hotbar-box-active");
 			$("li#hotbar-box5").addClass("hotbar-box-active");
 		break;
+	
 	}
 
 }
