@@ -10,4 +10,3 @@ function setTime(sec)
     clockObj.innerHTML = minutes + ":" + sec;
 }
 
-setTime(100);

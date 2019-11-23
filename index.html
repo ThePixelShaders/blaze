@@ -133,6 +133,17 @@
 				padding: 4px;
 			}
 
+			#action-text{
+				position: relative;
+				text-align: center;
+				background-color: white;
+				color: black;
+				border-radius: 5px;
+				width:128px;
+				left:43%;
+				bottom:5px;
+			}
+
 			#progress-bar{
 				margin: 0;
 				padding:0;
@@ -143,6 +154,7 @@
 				border-color: black; */
 				height: 15px;
 				width: 0;
+				border-radius: 5px 5px 5px 5px;
 			}
 
 			#hotbar{
@@ -152,7 +164,6 @@
    				left: 50%; /* position the left edge of the element at the middle of the parent */
 				bottom: 5px;
 				transform: translate(-46%, -16%);
-
 			}
 
 			.ui-element{
@@ -164,6 +175,7 @@
 				border-width: 5px;
 				border-color: black;
 				color : white;
+				border-radius: 5px;
 			}
 			#hotbar ul{
 				list-style-type: none;
@@ -281,8 +293,8 @@
 	
 		
 		<div id="hotbar">
+			<div id="action-text"></div>
 			<div id="progress-bar">
-
 			</div>
 			<!-- <input id="hotbar-input"  onkeydown="hotbar()"> -->
 
@@ -323,11 +335,6 @@
 
 		<div id="info">
 		</div>
-		
-		<div id="github">
-			<a href="https://github.com/antonioganea/blaze">Check out github page!</a>
-		</div>
-
 		
 		<script src="https://cdn.socket.io/socket.io-1.7.3.js"></script>
 		<script src="config.js"></script>
