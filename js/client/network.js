@@ -86,12 +86,13 @@ socket.on('removeTotem', function(x,y){
 });
 
 socket.on('deltas', function(deltaBuffer){
+	console.log(deltaBuffer)
 	for ( let i = 0; i < deltaBuffer.length; i++ ){
 		SceneManager.setTotem( deltaBuffer[i].x, deltaBuffer[i].y, deltaBuffer[i].type );
-		if ( deltaBuffer[i] ){
-			SceneManager.ownerMap = deltaBuffer[i].owner;
+		if ( deltaBuffer[i].owner ){
+			SceneManager.ownerMap[deltaBuffer[i].x][deltaBuffer[i].y] = deltaBuffer[i].owner;
 		}else{
-			SceneManager.ownerMap = "none";
+			SceneManager.ownerMap[deltaBuffer[i].x][deltaBuffer[i].y] = "none";
 		}
 		
 	}

@@ -156,6 +156,7 @@ io.on('connection', function(socket){
 	socket.on('placeTotem', function(x,y,type){
 		//console.log("placed totem " + type + " at coords : " + x + " " + y);
 		placeTotem( x, y,type, socket.id );
+		console.log( x + ' ' + y + ' ' + type + ' ' + socket.id);
 		socket.broadcast.emit('placeTotem',x,y,type, socket.id);
 	});
 	
