@@ -1,6 +1,6 @@
 var TotemLoader = {
 	
-	items : ["forest","forest_snow","rocks","rocks_snow","block","samsite","house1", "lumber1", "cannon", "house2", "lumber2", "mine", "refinery", "reactor", "BitOfTower"],
+	items : ["forest","forest_snow","rocks","rocks_snow","block","samsite","house1", "lumber1", "cannon", "house2", "lumber2", "mine", "refinery", "reactor", "BitOfTower", "mark", "sappling"],
 	totems : {},
 	
 	loaded : false,
@@ -79,7 +79,10 @@ var TotemLoader = {
 				totem = TotemLoader.totems.reactor.clone();
 				break;
 			case TotemTypes.tower:
-				totem = TotemLoader.totems.tower.clone();
+				totem = TotemLoader.totems.BitOfTower.clone();
+				break;
+			case TotemTypes.sappling:
+				totem = TotemLoader.totems.sappling.clone();
 				break;
 		}
 		
