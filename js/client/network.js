@@ -113,6 +113,11 @@ socket.on("waterLevel",function(level){
 	
 })
 
+
+socket.on("launchedProjectile",function(sX,sY,tX,tY) {
+	launchProjectile(sX,sY,tX,tY);
+})
+
 socket.on("setForcedWaterLevel",function(level){
 	SceneManager.waterlevel = level;
 	SceneManager.plane.position.set(0,level,0);

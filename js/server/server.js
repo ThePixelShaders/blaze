@@ -145,7 +145,7 @@ function requestTotemCleanup(){
 	}
 }
 
-var serverTimer = 60;
+var serverTimer = 300;
 //var phase = 3;
 // the clock
 setInterval(function(){
@@ -237,6 +237,14 @@ io.on('connection', function(socket){
 		//console.log("removed totem at coords : " + x + " " + y);
 		removeTotem(x,y);
 		socket.broadcast.emit('removeTotem',x,y);
+	});
+
+	socket.on('launchProjectile', function(sX,sY,tX,tY){
+		//console.log("removed totem at coords : " + x + " " + y);
+		//removeTotem(x,y);
+
+		// to remove target totem? ( do it clientside rather )
+		socket.broadcast.emit('launchedProjectile',sX,sY,tX,tY);
 	});
 	
 	socket.on("disconnect", function(){
