@@ -98,7 +98,7 @@ SceneManager = {
 				var voxel;
 				if ( height > 330 ){
                     voxel = new THREE.Mesh( cubeGeo, cubeMaterialSnow );
-                }else if ( height > 200 ){
+                }else if ( height > 120 ){
 					voxel = new THREE.Mesh( cubeGeo, cubeMaterial );
 				}else{
 					voxel = new THREE.Mesh( cubeGeo, cubeMaterialSand );
@@ -130,7 +130,8 @@ SceneManager = {
 		waterMat.opacity = 0.3;
 		waterMat.transparent = true;
 		let plane = new THREE.Mesh( planeGeometry, waterMat );
-		this.waterlevel = 202;
+		//this.waterlevel = 202;
+		this.waterlevel = 102;
 		plane.position.set(0,this.waterlevel,0);
 		plane.rotateX(3.14/2);
 		this.scene.add( plane );

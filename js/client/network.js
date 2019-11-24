@@ -59,8 +59,8 @@ socket.on("setOwnerID", function(socketID) {
 })
 
 socket.on('setSpawnPoint', function( x, y ){
-	SceneManager.addTotem( x, y, TotemTypes.residential, true );
-	socket.emit( "placeTotem", x, y, TotemTypes.residential );
+	SceneManager.addTotem( x, y, TotemTypes.house2, true );
+	socket.emit( "placeTotem", x, y, TotemTypes.house2 );
 	console.log("Spawnpoint set at " + x + ' ' + y );
 
 	spectateMode = false;
