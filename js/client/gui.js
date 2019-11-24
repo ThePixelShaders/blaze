@@ -18,10 +18,10 @@ var ResourceManager = {
         this.counters.metal = document.getElementById("res_iron");
         this.counters.petrol = document.getElementById("res_petrol");
 
-        this.setResourceCount( ResourceTypes.wood, 7);
-        this.setResourceCount( ResourceTypes.stone, 7);
-        this.setResourceCount( ResourceTypes.metal, 2);
-        this.setResourceCount( ResourceTypes.petrol, 1);
+        this.setResourceCount( ResourceTypes.wood, 30);
+        this.setResourceCount( ResourceTypes.stone, 30);
+        this.setResourceCount( ResourceTypes.metal, 4);
+        this.setResourceCount( ResourceTypes.petrol, 0);
     },
 
     setResourceCount : function( type, count ) {
@@ -44,7 +44,7 @@ var ResourceManager = {
                 break;
         }
     },
-
+/*
     getResourceCount : function (type)
     {
         switch( type ){
@@ -63,7 +63,7 @@ var ResourceManager = {
         }
         return 0;
     },
-
+*/
     getResourceCount : function ( type ){
         return this.resources[type];
     }

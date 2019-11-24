@@ -5,49 +5,49 @@ function itemDetails(currentActive){
     var itemDescription = document.getElementById("item-description");
     let wood, rocks, metal, description;
     switch(currentActive){
-        case 1:
-            wood = "4";
-            rocks = "2";
+        case 1: //House
+            wood = "10";
+            rocks = "";
             metal = "";
             description = "description";
             break;
-        case 2:
-                wood = "42";
-                rocks = "25";
+        case 2: //Lumberjack
+                wood = "15";
+                rocks = "1";
                 metal = "";
                 description = "description1";
             break;
-        case 3:
-                wood = "14";
-                rocks = "52";
+        case 3: //Mine
+                wood = "20";
+                rocks = "1";
                 metal = "";
                 description = "description2";
             break;
-        case 4:
-                wood = "14";
-                rocks = "26";
+        case 4: //Oil well
+                wood = "10";
+                rocks = "10";
                 metal = "";
                 description = "description3";
             break;
-        case 5:
-                wood = "234";
-                rocks = "52";
+        case 5: //Factory
+                wood = "5";
+                rocks = "15";
                 metal = "2";
                 description = "description4";
             break;
-        case 6:
-                wood = "524";
-                rocks = "66";
-                metal = "6";
+        case 6: //Cannon
+                wood = "10";
+                rocks = "10";
+                metal = "10";
                 description = "description5";
             break;
-        case 7:
-                wood = "46";
-                rocks = "32";
-                metal = "63";
+        case 7: //Tower
+                wood = "5";
+                rocks = "5";
+                metal = "10";
                 description = "description6";
             break;
-        case 8:
+        case 8: //PlantTree
                 wood = "1";
                 rocks = "";
                 metal = "";

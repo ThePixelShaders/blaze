@@ -1,5 +1,3 @@
-
-
 additionalText = {
     currentText : "",
     lasthandler : null,
@@ -29,6 +27,7 @@ additionalText = {
         }, 3000, this);
 
     },
+
     hideText : function() {
         document.getElementById("additionalText").style.display = "none";
     }
