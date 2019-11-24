@@ -161,7 +161,7 @@
 				position:absolute;
 				/* bottom: 10px;
 				left:37%; */
-   				left: 50%; /* position the left edge of the element at the middle of the parent */
+   				left: 43%; /* position the left edge of the element at the middle of the parent */
 				bottom: 5px;
 				transform: translate(-46%, -16%);
 				
@@ -170,8 +170,8 @@
 			.ui-element{
 				margin: 0;
 				padding: 0;
-				overflow: hidden;
 				background: #0f6600e6;
+				overflow: hidden;
 				border-style: dashed;
 				border-width: 5px;
 				border-color: black;
@@ -222,6 +222,11 @@
 				padding: 5px;
 			}
 
+			.priceSpan{
+				font-size: 16px;
+				font-weight: bold;
+			}
+
 			@media only screen and (max-width: 1530px) {
 				#hotbar ul li{
 					width:70px;
@@ -261,12 +266,11 @@
 		</div>
 
 		<div id="item-details" class="ui-element">
-			<p id="woodPrice">Wood: </p>
-			<p id="rocksPrice">Rocks: </p>
-			<p id="metalPrice">Metal: </p>
-			<p id="oilPrice">Oil: </p>
+			<p id="woodPrice">Wood: <span class="priceSpan">2</span></p>
+			<p id="rocksPrice">Rocks: <span class="priceSpan">4</span></p>
+			<p id="metalPrice"></p>
 			<div style="width:150px">
-				<p id="item-description">This can do something.</p>
+				<p id="item-description">description</p>
 			</div>
 		</div>
 
@@ -343,6 +347,10 @@
 
 				<li id="hotbar-box7"><img src="textures/tower-icon.png" style="width: 50px; height: 50px;">
 					<p>Tower</p>
+				</li>
+
+				<li id="hotbar-box8"><img src="textures/sapling-icon.png" style="width: 50px; height: 50px;">
+					<p>Plant tree</p>
 				</li>
 			</ul>
 
