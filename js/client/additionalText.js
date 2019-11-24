@@ -18,6 +18,10 @@ additionalText = {
         additionalText.style.display = "block";
         console.log(additionalText.getAttribute("display"));
         additionalText.innerHTML = "<p>" + text + "</p>";
+        
+        setTimeout(function(obj) {
+            obj.hideText();
+        }, 3000, this);
 
     },
     hideText : function() {

@@ -47,7 +47,7 @@
 			
 			#resourceScreen {
 				position: absolute;
-				bottom: 20px;
+				bottom: 30px;
 				right: 10px;
 			}
 			#resourceScreen ul {
@@ -62,6 +62,7 @@
 				float: left;
 				display: block;
 				text-align: center;
+				padding: 10px;
 			}
 			#res_container {
 				text-align: center;
@@ -96,7 +97,6 @@
 				width: 300px;
 				left: 0; 
 				top:25%;
-				
 			}
 			
 			.textArea
@@ -161,16 +161,17 @@
 				position:absolute;
 				/* bottom: 10px;
 				left:37%; */
-   				left: 50%; /* position the left edge of the element at the middle of the parent */
+   				left: 43%; /* position the left edge of the element at the middle of the parent */
 				bottom: 5px;
 				transform: translate(-46%, -16%);
+				
 			}
 
 			.ui-element{
 				margin: 0;
 				padding: 0;
-				overflow: hidden;
 				background: #0f6600e6;
+				overflow: hidden;
 				border-style: dashed;
 				border-width: 5px;
 				border-color: black;
@@ -179,6 +180,7 @@
 			}
 			#hotbar ul{
 				list-style-type: none;
+				height: 110px;
 			}
 			#hotbar ul li{
 				float: left;
@@ -212,6 +214,18 @@
 				border: none;
 			}
 
+			#item-details{
+				font-size: 12px;
+				position: absolute;
+				bottom: 150px;
+				right:10px;
+				padding: 5px;
+			}
+
+			.priceSpan{
+				font-size: 16px;
+				font-weight: bold;
+			}
 
 			@media only screen and (max-width: 1530px) {
 				#hotbar ul li{
@@ -250,6 +264,15 @@
 		</div>
 		
 		<div id="additionalText" class="ui-element">
+		</div>
+
+		<div id="item-details" class="ui-element">
+			<p id="woodPrice">Wood: <span class="priceSpan">2</span></p>
+			<p id="rocksPrice">Rocks: <span class="priceSpan">4</span></p>
+			<p id="metalPrice"></p>
+			<div style="width:150px">
+				<p id="item-description">description</p>
+			</div>
 		</div>
 
 		<div id="resourceScreen" class="ui-element">
@@ -326,6 +349,10 @@
 				<li id="hotbar-box7"><img src="textures/tower-icon.png" style="width: 50px; height: 50px;">
 					<p>Tower</p>
 				</li>
+
+				<li id="hotbar-box8"><img src="textures/sapling-icon.png" style="width: 50px; height: 50px;">
+					<p>Plant tree</p>
+				</li>
 			</ul>
 
 		</div>
@@ -350,6 +377,7 @@
 		<script src="js/client/controller.js"></script>
 		<script src="js/client/gui.js"></script>
 		<script src="config.js"></script>
+		<script src="js/client/item_details.js"></script>
 		<script src="js/client/network.js"></script>
 		<script src="js/client/clock.js"></script>
 		<script src="js/client/cooldown.js"></script>
