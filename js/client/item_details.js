@@ -9,43 +9,43 @@ function itemDetails(currentActive){
             wood = "10";
             rocks = "";
             metal = "";
-            description = "description";
+            description = "Home, expands building area";
             break;
         case 2: //Lumberjack
                 wood = "15";
                 rocks = "1";
                 metal = "";
-                description = "description1";
+                description = "Expands forest harvesting area";
             break;
         case 3: //Mine
                 wood = "20";
                 rocks = "1";
                 metal = "";
-                description = "description2";
+                description = "Expands mining area";
             break;
         case 4: //Oil well
                 wood = "10";
                 rocks = "10";
                 metal = "";
-                description = "description3";
+                description = "Extracts oil";
             break;
         case 5: //Factory
                 wood = "5";
                 rocks = "15";
                 metal = "2";
-                description = "description4";
+                description = "Smelts ore to metal";
             break;
         case 6: //Cannon
                 wood = "10";
                 rocks = "10";
                 metal = "10";
-                description = "description5";
+                description = "Use to attack enemy structures";
             break;
         case 7: //Tower
                 wood = "5";
                 rocks = "5";
                 metal = "10";
-                description = "description6";
+                description = "Defends buildings in range";
             break;
         case 8: //PlantTree
                 wood = "1";

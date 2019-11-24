@@ -50,6 +50,8 @@ SceneManager = {
 	ownerMap : [],
 	ownerID : "none", // this is the client's owner ID ( serverside socket id )
 	nickname : "none",
+	plane: null,
+
 	playerNicknames : {},
 	
 	dirtyBlocks : [],
@@ -69,6 +71,13 @@ SceneManager = {
 		var directionalLight = new THREE.DirectionalLight( 0xffffff );
 		directionalLight.position.set( 1, 0.75, 0.5 ).normalize();
 		this.scene.add( directionalLight );
+
+		/*
+		const color = 0x999999;  // white
+		const near = 800;
+		const far = 3000;
+		this.scene.fog = new THREE.Fog(color, near, far);
+		*/
 
 		for (let x = 0; x < 80; x++) {
 			this.ownerMap[x] = [];
@@ -131,12 +140,12 @@ SceneManager = {
 		let waterMat = new THREE.MeshBasicMaterial( {color: 0x0000ff, side: THREE.DoubleSide} );
 		waterMat.opacity = 0.3;
 		waterMat.transparent = true;
-		let plane = new THREE.Mesh( planeGeometry, waterMat );
+		this.plane = new THREE.Mesh( planeGeometry, waterMat );
 		//this.waterlevel = 202;
 		this.waterlevel = 102;
-		plane.position.set(0,this.waterlevel,0);
-		plane.rotateX(3.14/2);
-		this.scene.add( plane );
+		this.plane.position.set(0,this.waterlevel,0);
+		this.plane.rotateX(3.14/2);
+		this.scene.add( this.plane );
 	},
 	
 	update : function ( delta ){
