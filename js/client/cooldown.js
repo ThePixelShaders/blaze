@@ -31,12 +31,7 @@ function getCooldownPercent()
 
         return 1 - (small / all);
     }
-}
 
-function decreaseCountdown(time)
-{
-
-    
 }
 
 function setCooldown(time, string)
