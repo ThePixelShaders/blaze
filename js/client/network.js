@@ -134,6 +134,11 @@ socket.on('removeTotem', function(x,y){
 	SceneManager.ownerMap[x][y] = "none";
 });
 
+//io.emit("playerList", playerBuffer)
+socket.on('playerList', function(playerList){
+	renderScoreBoard( playerList );
+});
+
 socket.on('deltas', function(deltaBuffer){
 	console.log(deltaBuffer)
 	for ( let i = 0; i < deltaBuffer.length; i++ ){
