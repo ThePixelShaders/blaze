@@ -85,10 +85,14 @@ var ResourceTypes = {
 
 var RecipeManager = {
 	recipes:{
-		lumberjack: [0,4,2,0,0],
-		mine: [0,12,1,0,0],
+		house: [0,10,0,0,0],
+		lumberjack: [0,15,1,0,0],
+		mine: [0,20,1,0,0],
+		gasWell: [0,10,10,0,0],
+		factory: [0,5,15,2,0],
+		cannon: [0,10,10,10,0],
+		tower: [0,5,5,10,0],
 		sapling: [0,1,0,0,0]
-		//factory: [0,]
 	},
 
 	gotMaterial : function( recipe ){
