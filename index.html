@@ -47,8 +47,8 @@
 			
 			#resourceScreen {
 				position: absolute;
-				bottom: 30px;
-				right: 10px;
+				bottom: 0;
+				right: 0;
 			}
 			#resourceScreen ul {
 				position: relative;
@@ -162,9 +162,8 @@
 				/* bottom: 10px;
 				left:37%; */
    				left: 43%; /* position the left edge of the element at the middle of the parent */
-				bottom: 5px;
-				transform: translate(-46%, -16%);
-				
+				bottom: 0px;
+				transform: translate(-39%);
 			}
 
 			.ui-element{
@@ -172,11 +171,13 @@
 				padding: 0;
 				background: #0f6600e6;
 				overflow: hidden;
-				border-style: dashed;
+				border-style: solid;
 				border-width: 5px;
-				border-color: black;
+				border-color: #29801a;
 				color : white;
 				border-radius: 5px;
+
+				transform: scale(0.7);
 			}
 			#hotbar ul{
 				list-style-type: none;
@@ -198,6 +199,7 @@
 
 			#additionalText {
 				position: absolute;
+				max-width: 150px;
 				bottom: 50px;
 				left: 5%;
 			}
@@ -217,8 +219,8 @@
 			#item-details{
 				font-size: 12px;
 				position: absolute;
-				bottom: 150px;
-				right:10px;
+				bottom: 110px;
+				right: 0px;
 				padding: 5px;
 			}
 
@@ -373,6 +375,7 @@
 		<script src="js/client/additionalText.js"></script>
 		<script src="js/client/totemloader.js"></script>
 		<script src="js/client/scenemanager.js"></script>
+		<script src="js/client/totemShower.js"></script>
 		<script src="js/client/controller.js"></script>
 		<script src="js/client/gui.js"></script>
 		<script src="config.js"></script>
