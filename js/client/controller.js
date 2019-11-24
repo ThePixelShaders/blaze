@@ -239,7 +239,7 @@ function onDocumentMouseDown( event ) {
 								socket.emit( "placeTotem", tX, tZ, totemtype, true ); // not owned
 								//additionalText.displayText("You need ");
 								RecipeManager.consumeMaterial( RecipeManager.recipes.lumberjack )
-								setCooldown(3000, "Building Lumberjack...")
+								setCooldown(3000, "Planting tree...")
 								break;	
 							default:
 								addTotemInList(totemtype, tX, tZ);
