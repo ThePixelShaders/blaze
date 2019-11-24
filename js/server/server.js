@@ -13,7 +13,7 @@ admin.notify("Server booted");
 
 
 // WARNING : HARDCODED TO MATCH THE CLIENT VALUE
-var waterlevel = 202;
+var waterlevel = 102;
 
 // For serverside checks
 console.log("Generating terrain...");
@@ -56,6 +56,14 @@ for ( let x = 0; x < Generator.Generator.WORLD_WIDTH; x++ ){
 	}
 }
 
+function checkSpotAvailable( x, y ){
+	if ( totemMap[x][y] == Generator.TotemTypes.empty ){
+		return true;
+	}else{
+		return false;
+	}
+}
+
 // This objects holds data about the available places on the map, for spawning
 var SpawnManager = {
 	maximumLevelDifference: 30, // Maximum level difference between water level and possible spawn locations
@@ -79,15 +87,20 @@ var SpawnManager = {
 	},
 
 	dispatchSpawnPoint : function(){
-		// randum = random in range : 0 - availableSpaces.length
-		let randnum = Math.floor(Math.random() * this.availableSpaces.length);
+		while ( this.availableSpaces.length > 0 ){
+			// randum = random in range : 0 - availableSpaces.length
+			let randnum = Math.floor(Math.random() * this.availableSpaces.length);
 
-		let spawnpoint = this.availableSpaces[randnum];
+			let spawnpoint = this.availableSpaces[randnum];
 
-		// remove from availableSpaces
-		this.availableSpaces.splice(randnum, 1);
+			// remove from availableSpaces
+			this.availableSpaces.splice(randnum, 1);
+			
+			if ( checkSpotAvailable( spawnpoint.x, spawnpoint.y ) )
+				return spawnpoint;
+		}
+		console.log("error : no more available spawn points");
 
-		return spawnpoint;
 	}
 }
 
@@ -119,6 +132,11 @@ function removeTotem( x, y ){
 	//console.log(deltaBuffer);
 }
 
+function sleepFor( sleepDuration ){
+    var now = new Date().getTime();
+    while(new Date().getTime() < now + sleepDuration){ /* do nothing */ } 
+}
+
 app.get('/', function(req, res){
   //res.sendFile(__dirname + '/index.html');
   res.send("Blaze Project SocketIO server");
@@ -139,6 +157,7 @@ io.on('connection', function(socket){
 		console.log("Serving seed");
 		socket.emit('mapseed', mapseed);
 
+		sleepFor(1000);
 		let newpoint = SpawnManager.dispatchSpawnPoint();
 		socket.emit('setSpawnPoint', newpoint.x, newpoint.y );
 		console.log("Requested spawnpoint at " + newpoint.x + ' ' + newpoint.y );
