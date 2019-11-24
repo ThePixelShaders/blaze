@@ -53,6 +53,11 @@ socket.on('mapseed', function(seed){
 	}
 });
 
+//socket.broadcast.emit('playerNickname',socket.id,nickname)
+socket.on('playerNickname', function(socketid, nick){
+	playerNicknames[socketid] = nick;
+});
+
 socket.on("setOwnerID", function(socketID) {
 	console.log("Received owner id : " + socketID);
 	SceneManager.ownerID = socketID;
