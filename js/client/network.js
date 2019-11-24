@@ -101,6 +101,8 @@ socket.on('setTotem', function(x,y,type, owner){
 //io.emit("waterLevel",waterlevel)
 
 socket.on("waterLevel",function(level){
+	displayText();
+	setTimeout(function(){endDisplayText();},2000)
 	SceneManager.waterlevel = level;
 	var waterSmoothInterval = setInterval(function(){
 		if ( SceneManager.plane.position.y < SceneManager.waterlevel ){

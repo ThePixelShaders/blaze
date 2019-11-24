@@ -145,7 +145,7 @@ function requestTotemCleanup(){
 	}
 }
 
-var serverTimer = 300;
+var serverTimer = 120;
 //var phase = 3;
 // the clock
 setInterval(function(){
@@ -153,7 +153,7 @@ setInterval(function(){
 	io.emit("waveTimer", serverTimer)
 	if ( serverTimer < 0 ){
 		// trigger the water expansion
-		serverTimer = 30;
+		serverTimer = 120;
 		waterlevel += 50;
 		SpawnManager.computeAvailableSpaces();
 		requestTotemCleanup()
