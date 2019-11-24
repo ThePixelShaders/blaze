@@ -196,37 +196,41 @@ function onDocumentMouseDown( event ) {
 				socket.emit( "placeTotem", tX, tZ, TotemTypes.residential );
 			}*/
 
-			if ( !isCooldownReady() ){
-				additionalText.displayText("Wait for the cooldown to finish!");
+			if ( heightmap[tX][tZ] < SceneManager.waterlevel ){
+				additionalText.displayText("You're attempting to place underwater!");
 			}else{
-
-				// Checks if you're attempting to build in a range of maximum 5 meters from a nearby structure you own
-				if ( !checkIfFriendlyTotemInRange( tX, tZ, 5 ) ){
-					additionalText.displayText("Too far away from your structures!");
+				if ( !isCooldownReady() ){
+					additionalText.displayText("Wait for the cooldown to finish!");
 				}else{
 
-					let totemtype = HotBar.getCurrentActive();
+					// Checks if you're attempting to build in a range of maximum 5 meters from a nearby structure you own
+					if ( !checkIfFriendlyTotemInRange( tX, tZ, 5 ) ){
+						additionalText.displayText("Too far away from your structures!");
+					}else{
 
-					switch( totemtype ){
-						case TotemTypes.lumber1:
-							if ( RecipeManager.gotMaterial( RecipeManager.recipes.lumberjack ) )
-							{
+						let totemtype = HotBar.getCurrentActive();
+
+						switch( totemtype ){
+							case TotemTypes.lumber1:
+								if ( RecipeManager.gotMaterial( RecipeManager.recipes.lumberjack ) )
+								{
+									SceneManager.addTotem( tX, tZ, totemtype, true );
+									socket.emit( "placeTotem", tX, tZ, totemtype );
+									//additionalText.displayText("You need ");
+									RecipeManager.consumeMaterial( RecipeManager.recipes.lumberjack )
+									//ResourceManager.setResourceCount(ResourceTypes.wood, ResourceManager.getResourceCount(ResourceTypes.wood) - 4);
+									//ResourceManager.setResourceCount(ResourceTypes.stone, ResourceManager.getResourceCount(ResourceTypes.stone) - 2);
+									//let debug = ResourceManager.resources;
+									//debugger;
+								}else{
+									additionalText.displayText("Not enough resources for lumberjack!");
+								}
+
+								break;
+							default:
 								SceneManager.addTotem( tX, tZ, totemtype, true );
 								socket.emit( "placeTotem", tX, tZ, totemtype );
-								//additionalText.displayText("You need ");
-								RecipeManager.consumeMaterial( RecipeManager.recipes.lumberjack )
-								//ResourceManager.setResourceCount(ResourceTypes.wood, ResourceManager.getResourceCount(ResourceTypes.wood) - 4);
-								//ResourceManager.setResourceCount(ResourceTypes.stone, ResourceManager.getResourceCount(ResourceTypes.stone) - 2);
-								//let debug = ResourceManager.resources;
-								//debugger;
-							}else{
-								additionalText.displayText("Not enough resources for lumberjack!");
-							}
-
-							break;
-						default:
-							SceneManager.addTotem( tX, tZ, totemtype, true );
-							socket.emit( "placeTotem", tX, tZ, totemtype );
+						}
 					}
 				}
 			}
