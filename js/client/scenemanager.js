@@ -41,6 +41,14 @@ cubeMaterialSnow = new THREE.MeshLambertMaterial( {  map: texturesnow } );
 
 var selectionCylinder;
 
+function isDead()
+{
+    if(SceneManager.mybuildingscount == 0){
+        let img = document.getElementById("deathscreen");
+        img.style.display = "block";
+    }     
+}
+
 SceneManager = {
 	
 	objects : [],
@@ -51,6 +59,7 @@ SceneManager = {
 	ownerID : "none", // this is the client's owner ID ( serverside socket id )
 	nickname : "none",
 	plane: null,
+	mybuildingscount:0,
 
 	playerNicknames : {},
 	
@@ -190,6 +199,8 @@ SceneManager = {
 			//console.log("Error : addTotem called on existing totem tile " + this.totemMap[x][y]);
 			return;
 		}
+
+		
 		
 		this.totemMap[x][y] = totemType;
 		let height = this.heightmap[x][y];
@@ -202,6 +213,8 @@ SceneManager = {
 		this.placedTotems[x][y] = totem;
 		if ( !notOwned ){
 			this.ownerMap[x][y] = this.ownerID;
+
+			this.mybuildingscount++;
 		}
 		
 		if ( animated ){
@@ -222,7 +235,15 @@ SceneManager = {
 
 			let totem = this.placedTotems[x][y];
 			this.placedTotems[x][y] = 0;
+
+			if(this.ownerMap[x][y] == this.ownerID){
+				this.mybuildingscount--;
+				isDead();
+			}
+
 			this.ownerMap[x][y] = "none";
+
+			
 			
 			
 			//this.dirtyBlocks.push([totem,0,false,false]);
@@ -235,6 +256,7 @@ SceneManager = {
 			
 			//this.objects.splice( objects.indexOf( totem ), 1 );
 			//console.log("removed block at " + x + " " + y );
+			
 		}else{
 			//console.log( "Error : attempt to remove totem at empty position " + x + " " + y );
 		}
