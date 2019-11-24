@@ -41,13 +41,13 @@ function setCooldown(time, string)
     finishTime = initialTime + time;
     interval = setInterval(() => {
         let a = getCooldown();
-        setTime((Math.floor(a/1000)));
+        //setTime((Math.floor(a/1000)));
         setProgressbar(getCooldownPercent(), string);
         if(getCooldown()==0)
         {
             actionText.innerHTML = "";
             isCooldownReadyBool = true;
-            setTime(0);
+            //setTime(0);
             clearInterval(interval);
         }
         //clearInterval
