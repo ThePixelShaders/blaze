@@ -196,7 +196,7 @@ function onDocumentMouseDown( event ) {
 				socket.emit( "placeTotem", tX, tZ, TotemTypes.residential );
 			}*/
 
-			if ( heightmap[tX][tZ] < SceneManager.waterlevel ){
+			if ( heightmap[tX][tZ] < SceneManager.waterlevel-25 ){
 				additionalText.displayText("You're attempting to place underwater!");
 			}else{
 				if ( !isCooldownReady() ){
