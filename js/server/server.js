@@ -119,6 +119,11 @@ function removeTotem( x, y ){
 	//console.log(deltaBuffer);
 }
 
+function sleepFor( sleepDuration ){
+    var now = new Date().getTime();
+    while(new Date().getTime() < now + sleepDuration){ /* do nothing */ } 
+}
+
 app.get('/', function(req, res){
   //res.sendFile(__dirname + '/index.html');
   res.send("Blaze Project SocketIO server");
@@ -139,6 +144,7 @@ io.on('connection', function(socket){
 		console.log("Serving seed");
 		socket.emit('mapseed', mapseed);
 
+		sleepFor(1000);
 		let newpoint = SpawnManager.dispatchSpawnPoint();
 		socket.emit('setSpawnPoint', newpoint.x, newpoint.y );
 		console.log("Requested spawnpoint at " + newpoint.x + ' ' + newpoint.y );
