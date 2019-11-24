@@ -304,10 +304,10 @@ function onDocumentMouseDown( event ) {
 						if ( checkIfTotemInRange(tX,tZ,TotemTypes.cannon, 8) ){
 							// if there is an available cannon in range
 							// taraneala pe lastCheckX, lastCheckY
-							if(RecipeManager.getResourceCount(ResourceTypes.petrol) >= 5){
+							if(ResourceManager.getResourceCount(ResourceTypes.petrol) >= 5){
 								launchProjectile(lastCheckX,lastCheckY, tX, tZ, true);
 								socket.emit( "launchProjectile", lastCheckX, lastCheckY, tX, tZ );
-								RecipeManager.setResourceCount(ResourceTypes.petrol, RecipeManager.getResourceCount(ResourceTypes.petrol) - 5);
+								ResourceManager.setResourceCount(ResourceTypes.petrol, ResourceManager.getResourceCount(ResourceTypes.petrol) - 5);
 							}
 							else{ 
 								additionalText.displayText("You don't have enough oil!");
@@ -317,10 +317,12 @@ function onDocumentMouseDown( event ) {
 						}else{
 							additionalText.displayText("No available cannon nearby!");
 						}
+					}else{
+						additionalText.displayText("Cannot place over existing objects!");
 					}
 				}
 
-				additionalText.displayText("Cannot place over existing objects!");
+				
 			}else{
 				if ( heightmap[tX][tZ] < SceneManager.waterlevel-25 ){
 					additionalText.displayText("You're attempting to place underwater!");
