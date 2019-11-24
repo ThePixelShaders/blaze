@@ -47,7 +47,7 @@
 			
 			#resourceScreen {
 				position: absolute;
-				bottom: 20px;
+				bottom: 30px;
 				right: 10px;
 			}
 			#resourceScreen ul {
@@ -62,6 +62,7 @@
 				float: left;
 				display: block;
 				text-align: center;
+				padding: 10px;
 			}
 			#res_container {
 				text-align: center;
@@ -96,7 +97,6 @@
 				width: 300px;
 				left: 0; 
 				top:25%;
-				
 			}
 			
 			.textArea
@@ -164,6 +164,7 @@
    				left: 50%; /* position the left edge of the element at the middle of the parent */
 				bottom: 5px;
 				transform: translate(-46%, -16%);
+				
 			}
 
 			.ui-element{
@@ -179,6 +180,7 @@
 			}
 			#hotbar ul{
 				list-style-type: none;
+				height: 110px;
 			}
 			#hotbar ul li{
 				float: left;
@@ -212,6 +214,13 @@
 				border: none;
 			}
 
+			#item-details{
+				font-size: 12px;
+				position: absolute;
+				bottom: 150px;
+				right:10px;
+				padding: 5px;
+			}
 
 			@media only screen and (max-width: 1530px) {
 				#hotbar ul li{
@@ -250,6 +259,16 @@
 		</div>
 		
 		<div id="additionalText" class="ui-element">
+		</div>
+
+		<div id="item-details" class="ui-element">
+			<p id="woodPrice">Wood: </p>
+			<p id="rocksPrice">Rocks: </p>
+			<p id="metalPrice">Metal: </p>
+			<p id="oilPrice">Oil: </p>
+			<div style="width:150px">
+				<p id="item-description">This can do something.</p>
+			</div>
 		</div>
 
 		<div id="resourceScreen" class="ui-element">
@@ -350,6 +369,7 @@
 		<script src="js/client/controller.js"></script>
 		<script src="js/client/gui.js"></script>
 		<script src="config.js"></script>
+		<script src="js/client/item_details.js"></script>
 		<script src="js/client/network.js"></script>
 		<script src="js/client/clock.js"></script>
 		<script src="js/client/cooldown.js"></script>
