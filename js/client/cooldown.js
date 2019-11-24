@@ -33,6 +33,12 @@ function getCooldownPercent()
     }
 }
 
+function decreaseCountdown(time)
+{
+
+    
+}
+
 function setCooldown(time, string)
 {
     isCooldownReadyBool = false;
