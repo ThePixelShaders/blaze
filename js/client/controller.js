@@ -181,7 +181,6 @@ function onDocumentMouseDown( event ) {
 						SceneManager.removeTotem( tX, tZ, true );
 						socket.emit("removeTotem",tX,tZ);
 				}
-
 			}
 			
 
@@ -221,44 +220,58 @@ function onDocumentMouseDown( event ) {
 						if ( !checkIfFriendlyTotemInRange( tX, tZ, 5 ) ){
 							additionalText.displayText("Too far away from your structures!");
 						}else{
-
-							let totemtype = HotBar.getCurrentActive();
-
-							switch( totemtype ){
-								case TotemTypes.lumber1:
-									if ( RecipeManager.gotMaterial( RecipeManager.recipes.lumberjack ) )
+                        let totemtype = HotBar.getCurrentActive();
+						switch( totemtype ){
+							case TotemTypes.house1:
+									if ( RecipeManager.gotMaterial( RecipeManager.recipes.house ) )
 									{
 										SceneManager.addTotem( tX, tZ, totemtype, true );
 										socket.emit( "placeTotem", tX, tZ, totemtype );
-										//additionalText.displayText("You need ");
-										RecipeManager.consumeMaterial( RecipeManager.recipes.lumberjack )
-										setCooldown(3000, "Building Lumberjack...")
-										//ResourceManager.setResourceCount(ResourceTypes.wood, ResourceManager.getResourceCount(ResourceTypes.wood) - 4);
-										//ResourceManager.setResourceCount(ResourceTypes.stone, ResourceManager.getResourceCount(ResourceTypes.stone) - 2);
-										//let debug = ResourceManager.resources;
-										//debugger;
-									}else{
+										RecipeManager.consumeMaterial( RecipeManager.recipes.house );
+										setCooldown(3000, "Building House...");
+									}
+									else
+									{
 										additionalText.displayText("Not enough resources for lumberjack!");
 									}
-
-									break;
-								case TotemTypes.sappling:
-									if ( RecipeManager.gotMaterial( RecipeManager.recipes.sapling ) ){
-										SceneManager.addTotem( tX, tZ, totemtype, true, true ); // animated, not owned ( last true, true )
-										socket.emit( "placeTotem", tX, tZ, totemtype, true ); // not owned
-										//additionalText.displayText("You need ");
-										RecipeManager.consumeMaterial( RecipeManager.recipes.sapling )
-										setCooldown(3000, "Planting tree...")
-									}else{
-										additionalText.displayText("Not enough resources to plant tree!");
-									}
-
-									break;	
-								default:
-									//addTotemInList(totemtype, tX, tZ);
+								break;
+							case TotemTypes.lumber1:
+								if ( RecipeManager.gotMaterial( RecipeManager.recipes.lumberjack ) )
+								{
 									SceneManager.addTotem( tX, tZ, totemtype, true );
 									socket.emit( "placeTotem", tX, tZ, totemtype );
-									setCooldown(3000, "Building...")
+									setCooldown(3000, "Building...");
+                                    	SceneManager.addTotem( tX, tZ, totemtype, true );
+									socket.emit( "placeTotem", tX, tZ, totemtype );
+									//additionalText.displayText("You need ");
+									RecipeManager.consumeMaterial( RecipeManager.recipes.lumberjack )
+									setCooldown(3000, "Building Lumberjack...")
+									//ResourceManager.setResourceCount(ResourceTypes.wood, ResourceManager.getResourceCount(ResourceTypes.wood) - 4);
+									//ResourceManager.setResourceCount(ResourceTypes.stone, ResourceManager.getResourceCount(ResourceTypes.stone) - 2);
+									//let debug = ResourceManager.resources;
+									//debugger;
+								}else{
+									additionalText.displayText("Not enough resources for lumberjack!");
+								}
+
+								break;
+							case TotemTypes.sappling:
+								if ( RecipeManager.gotMaterial( RecipeManager.recipes.sapling ) ){
+									SceneManager.addTotem( tX, tZ, totemtype, true, true ); // animated, not owned ( last true, true )
+									socket.emit( "placeTotem", tX, tZ, totemtype, true ); // not owned
+									//additionalText.displayText("You need ");
+									RecipeManager.consumeMaterial( RecipeManager.recipes.sapling )
+									setCooldown(3000, "Planting tree...")
+								}else{
+									additionalText.displayText("Not enough resources to plant tree!");
+								}
+
+								break;	
+							default:
+								addTotemInList(totemtype, tX, tZ);
+								SceneManager.addTotem( tX, tZ, totemtype, true );
+								socket.emit( "placeTotem", tX, tZ, totemtype );
+								setCooldown(3000, "Building...");
 							}
 						}
 					}
