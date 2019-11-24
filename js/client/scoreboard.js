@@ -6,7 +6,7 @@ scoreboard = {
     addScore : function(name, value) {
         
         this.Players[name] = value;
-        console.log(this.Players);
+        //console.log(this.Players);
     },
 
     getScoreBoard : function() {
