@@ -176,7 +176,7 @@ SceneManager = {
 		this.dirtyBlocks.push([totem,0,growing,false]); // this is the reason for which typescript sounds good
 	},
 	
-	addTotem : function ( x, y, totemType, animated ){
+	addTotem : function ( x, y, totemType, animated, notOwned ){
 		if ( this.totemMap[x][y] != 0 ){
 			//console.log("Error : addTotem called on existing totem tile " + this.totemMap[x][y]);
 			return;
@@ -191,7 +191,9 @@ SceneManager = {
 		this.scene.add(totem);
 		
 		this.placedTotems[x][y] = totem;
-		this.ownerMap[x][y] = this.ownerID;
+		if ( !notOwned ){
+			this.ownerMap[x][y] = this.ownerID;
+		}
 		
 		if ( animated ){
 			totem.scale.x = 1/16; totem.scale.y = 1/16; totem.scale.z = 1/16;

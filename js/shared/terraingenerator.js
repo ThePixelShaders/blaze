@@ -20,6 +20,7 @@ var TotemTypes = {
 	house2: 13,
 	tower: 14,
 	mark: 15,
+	sappling: 16
 };
 
 
@@ -125,5 +126,5 @@ var Generator = {
 // shared code hotfix
 var module = module;
 if ( typeof module == "object" ){
-module.exports = Generator;
+module.exports = { Generator:Generator, TotemTypes:TotemTypes };
 }
