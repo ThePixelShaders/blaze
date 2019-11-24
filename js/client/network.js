@@ -98,6 +98,32 @@ socket.on('setTotem', function(x,y,type, owner){
 	SceneManager.ownerMap[x][y] = owner;
 });
 
+//io.emit("waterLevel",waterlevel)
+
+socket.on("waterLevel",function(level){
+	SceneManager.waterlevel = level;
+	var waterSmoothInterval = setInterval(function(){
+		if ( SceneManager.plane.position.y < SceneManager.waterlevel ){
+			SceneManager.plane.position.set(0,SceneManager.plane.position.y+1,0);
+		}else{
+			clearInterval(waterSmoothInterval);
+		}
+		
+	},100)
+	
+})
+
+socket.on("setForcedWaterLevel",function(level){
+	SceneManager.waterlevel = level;
+	SceneManager.plane.position.set(0,level,0);
+})
+
+//io.emit("waveTimer", serverTimer)
+
+socket.on("waveTimer",function(serverTimer){
+	setTime(serverTimer)
+})
+
 socket.on('removeTotem', function(x,y){
 	SceneManager.removeTotem( x, y, true );
 	SceneManager.ownerMap[x][y] = "none";

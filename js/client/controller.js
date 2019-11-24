@@ -368,13 +368,15 @@ function onDocumentKeyDown( event ) {
 		case 39: /*right*/
 		case 68: /*D*/
 			isRightDown = true;
-			scoreboard.addScore("vasile", 420);
+			//scoreboard.addScore("vasile", 420);
 		break;
 
 		case 82: /*R*/ this.moveUp = true;
-		renderScoreBoard(); break;
+		//renderScoreBoard();
+		break;
 		case 70: /*F*/ this.moveDown = true;
-		scoreboard.addScore("ion", 69); break;
+		//scoreboard.addScore("ion", 69); 
+		break;
 
 		case 49: /*1*/ 
 			$("li.hotbar-box-active").removeClass("hotbar-box-active");
