@@ -18,6 +18,9 @@ var TotemTypes = {
 	cannon: 11,
 	lumber2 : 12,
 	house2: 13,
+	tower: 14,
+	mark: 15,
+	sappling: 16
 };
 
 
@@ -82,7 +85,8 @@ var Generator = {
 			value *= this.ampltitude;
 			
 			// Water flicker fix
-			if ( Math.abs ( value - 175 ) <= 10 ){ value = value-value%5; }
+			//if ( Math.abs ( value - 175 ) <= 10 ){ value = value-value%5; }
+			if ( Math.abs ( value - 75 ) <= 10 ){ value = value-value%5; }
 			
 			heightmap[x][y] = value;    
 		  }
@@ -104,7 +108,7 @@ var Generator = {
 			totems[x] = [];
 		  for (let y = 0; y < this.WORLD_HEIGHT; y++) {
 			  totems[x][y] = TotemTypes.empty;
-			if ( heightmap[x][y] > 200 ){
+			if ( heightmap[x][y] > 105 ){
 				if ((Perlin.hashing_PRNG() * 0.5) + 0.5 <= 1.0/18.0 )
 					totems[x][y] = TotemTypes.forest;
 				else if ((Perlin.hashing_PRNG() * 0.5) + 0.5 <= 1.0 / 10)
@@ -122,5 +126,5 @@ var Generator = {
 // shared code hotfix
 var module = module;
 if ( typeof module == "object" ){
-module.exports = Generator;
+module.exports = { Generator:Generator, TotemTypes:TotemTypes };
 }

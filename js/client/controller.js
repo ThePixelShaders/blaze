@@ -1,6 +1,6 @@
 var HotBar = {
 	currentActive : 1,
-	hotbarMapping : [ TotemTypes.empty, TotemTypes.house1, TotemTypes.lumber1, TotemTypes.mine, TotemTypes.petrol, TotemTypes.nuclearplant, TotemTypes.cannon, TotemTypes.settlement ],
+	hotbarMapping : [ TotemTypes.empty, TotemTypes.house1, TotemTypes.lumber1, TotemTypes.mine, TotemTypes.petrol, TotemTypes.nuclearplant, TotemTypes.cannon, TotemTypes.tower, TotemTypes.sappling ],
 
 	// this returns a TotemType
 	getCurrentActive : function(){
@@ -19,7 +19,24 @@ function checkIfTotemInRange( x, y, type, range ){
 	return false;
 }
 
+function checkIfFriendlyTotemInRange( x, y, range ){
+	for ( let itx = x-range; itx <= x + range; itx++ ){
+		for ( let ity = y-range; ity <= y+ range; ity++ ){
+			if ( SceneManager.ownerMap[itx][ity] == SceneManager.ownerID ){
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+// This is used for the login screen thing
+var CONTROLLER_DISABLED = true;
+
 function onDocumentMouseMove( event ) {
+
+	if ( CONTROLLER_DISABLED ) { return; }
+
 	event.preventDefault();
 	
 	mouse.set( ( event.clientX / window.innerWidth ) * 2 - 1, - ( event.clientY / window.innerHeight ) * 2 + 1 );
@@ -57,7 +74,49 @@ function onDocumentMouseMove( event ) {
 	}
 }
 
+/*
+var ResourceTypes = {
+    wood: 1,
+    stone: 2,
+    metal: 3,
+    petrol: 4
+}
+*/
+
+var RecipeManager = {
+	recipes:{
+		house: [0,10,0,0,0],
+		lumberjack: [0,15,1,0,0],
+		mine: [0,20,1,0,0],
+		gasWell: [0,10,10,0,0],
+		factory: [0,5,15,2,0],
+		cannon: [0,10,10,10,0],
+		tower: [0,5,5,10,0],
+		sapling: [0,1,0,0,0]
+	},
+
+	gotMaterial : function( recipe ){
+		for ( let i = 1; i <= 4; i++ ){
+			if ( ResourceManager.getResourceCount(i) < recipe[i] ){
+				return false;
+			}
+		}
+		return true;
+	},
+
+	consumeMaterial : function( recipe ){
+		for ( let i = 1; i <= 4; i++ ){
+			if ( recipe[i] > 0 ){
+				ResourceManager.setResourceCount(i,ResourceManager.getResourceCount(i)-recipe[i])
+			}
+		}
+	}
+
+}
+
 function onDocumentMouseDown( event ) {
+
+	if ( CONTROLLER_DISABLED ) { return; }
 	
 	//console.log( event.srcElement.nodeName )
 	//if (event.srcElement.nodeName !== 'INPUT') {
@@ -78,38 +137,51 @@ function onDocumentMouseDown( event ) {
 			let tX = ( intersect.object.position.x + 2125 ) / 50;
 			let tZ = ( intersect.object.position.z + 2125 ) / 50;
 
+			if ( !isCooldownReady() ){
+				additionalText.displayText("Wait for the cooldown to finish!");
+			}else{
 
-			switch( SceneManager.totemMap[tX][tZ] ){
-				case TotemTypes.forest:
-					if ( checkIfTotemInRange(tX,tZ,TotemTypes.lumber1, 4) ){ // if there is a lumberjack nearby
-						// cut the forest
+				switch( SceneManager.totemMap[tX][tZ] ){
+					case TotemTypes.forest:
+						if ( checkIfTotemInRange(tX,tZ,TotemTypes.lumber1, 4) ){ // if there is a lumberjack nearby
+							// cut the forest
+								//ResourceManager.
 
-						//ResourceManager.
+								SceneManager.removeTotem( tX, tZ, true );
+								socket.emit("removeTotem",tX,tZ);
 
+								setCooldown(3000, "Cutting Forest...")
+
+								var woodCount = ResourceManager.getResourceCount(ResourceTypes.wood);
+								woodCount = woodCount + Math.floor(Math.random() * 2) + 4;
+								ResourceManager.setResourceCount(ResourceTypes.wood, woodCount);
+
+						}else {
+							// set warning that you're trying to cut forest too far away
+							additionalText.displayText("You're trying to cut a forest too far away from a lumberjack");
+						}
+						break;
+					case TotemTypes.rocky:
+						if ( checkIfTotemInRange(tX,tZ,TotemTypes.mine, 4) ){ // if there is a lumberjack nearby
+							SceneManager.removeTotem( tX, tZ, true );
+							socket.emit("removeTotem",tX,tZ);
+
+							setCooldown(3000, "Mining Rocks...")
+
+							var stoneCount = ResourceManager.getResourceCount(ResourceTypes.stone);
+							stoneCount = stoneCount + Math.floor(Math.random() * 4) + 6;
+							ResourceManager.setResourceCount(ResourceTypes.stone, stoneCount);
+						}else {
+							// set warning that you're trying to cut forest too far away
+							additionalText.displayText("You're trying to mine rocks too far away from a mine");
+						}
+
+						break;
+					default:
 						SceneManager.removeTotem( tX, tZ, true );
 						socket.emit("removeTotem",tX,tZ);
+				}
 
-						var woodCount = ResourceManager.getResourceCount(ResourceTypes.wood);
-						woodCount = woodCount + Math.floor(Math.random() * 2) + 4;
-						ResourceManager.setResourceCount(ResourceTypes.wood, woodCount);
-					}else {
-						// set warning that you're trying to cut forest too far away
-						additionalText.displayText("You're trying to cut a forest too far away from a lumberjack");
-					}
-					break;
-				case TotemTypes.rocky:
-
-					SceneManager.removeTotem( tX, tZ, true );
-					socket.emit("removeTotem",tX,tZ);
-
-					var woodCount = ResourceManager.getResourceCount(ResourceTypes.wood);
-					woodCount = woodCount + Math.floor(Math.random() * 4) + 6;
-					ResourceManager.setResourceCount(ResourceTypes.wood, woodCount);
-
-					break;
-				default:
-					SceneManager.removeTotem( tX, tZ, true );
-					socket.emit("removeTotem",tX,tZ);
 			}
 			
 
@@ -135,24 +207,58 @@ function onDocumentMouseDown( event ) {
 				socket.emit( "placeTotem", tX, tZ, TotemTypes.residential );
 			}*/
 
-			let totemtype = HotBar.getCurrentActive();
-			
-			if (totemtype == TotemTypes.lumber1)
-			{
-				if (ResourceManager.getResourceCount(ResourceTypes.wood) >= 4 &&
-					ResourceManager.getResourceCount(ResourceTypes.stone) >= 2)
-				{
-					SceneManager.addTotem( tX, tZ, totemtype );
-					socket.emit( "placeTotem", tX, tZ, totemtype );
-					//additionalText.displayText("You need ");
-					ResourceManager.setResourceCount(ResourceTypes.wood, ResourceManager.getResourceCount() - 4);
-					ResourceManager.setResourceCount(ResourceTypes.stone, ResourceManager.getResourceCount() - 2);
+			if ( heightmap[tX][tZ] < SceneManager.waterlevel-25 ){
+				additionalText.displayText("You're attempting to place underwater!");
+			}else{
+				if ( !isCooldownReady() ){
+					additionalText.displayText("Wait for the cooldown to finish!");
+				}else{
+
+					// Checks if you're attempting to build in a range of maximum 5 meters from a nearby structure you own
+					if ( !checkIfFriendlyTotemInRange( tX, tZ, 5 ) ){
+						additionalText.displayText("Too far away from your structures!");
+					}else{
+
+						let totemtype = HotBar.getCurrentActive();
+
+						switch( totemtype ){
+							case TotemTypes.lumber1:
+								if ( RecipeManager.gotMaterial( RecipeManager.recipes.lumberjack ) )
+								{
+									SceneManager.addTotem( tX, tZ, totemtype, true );
+									socket.emit( "placeTotem", tX, tZ, totemtype );
+									//additionalText.displayText("You need ");
+									RecipeManager.consumeMaterial( RecipeManager.recipes.lumberjack )
+									setCooldown(3000, "Building Lumberjack...")
+									//ResourceManager.setResourceCount(ResourceTypes.wood, ResourceManager.getResourceCount(ResourceTypes.wood) - 4);
+									//ResourceManager.setResourceCount(ResourceTypes.stone, ResourceManager.getResourceCount(ResourceTypes.stone) - 2);
+									//let debug = ResourceManager.resources;
+									//debugger;
+								}else{
+									additionalText.displayText("Not enough resources for lumberjack!");
+								}
+
+								break;
+							case TotemTypes.sappling:
+								if ( RecipeManager.gotMaterial( RecipeManager.recipes.sapling ) ){
+									SceneManager.addTotem( tX, tZ, totemtype, true, true ); // animated, not owned ( last true, true )
+									socket.emit( "placeTotem", tX, tZ, totemtype, true ); // not owned
+									//additionalText.displayText("You need ");
+									RecipeManager.consumeMaterial( RecipeManager.recipes.sapling )
+									setCooldown(3000, "Planting tree...")
+								}else{
+									additionalText.displayText("Not enough resources to plant tree!");
+								}
+
+								break;	
+							default:
+								addTotemInList(totemtype, tX, tZ);
+								SceneManager.addTotem( tX, tZ, totemtype, true );
+								socket.emit( "placeTotem", tX, tZ, totemtype );
+								setCooldown(3000, "Building...")
+						}
+					}
 				}
-			}
-			else
-			{
-				SceneManager.addTotem( tX, tZ, totemtype );
-				socket.emit( "placeTotem", tX, tZ, totemtype );
 			}
 			
 		}
@@ -168,6 +274,9 @@ var isShiftDown = false;
 
 
 function onDocumentKeyDown( event ) {
+
+	if ( CONTROLLER_DISABLED ) { return; }
+
 	switch ( event.keyCode ) {
 		case 16: isShiftDown = true; break;
 
@@ -201,42 +310,58 @@ function onDocumentKeyDown( event ) {
 			$("li.hotbar-box-active").removeClass("hotbar-box-active");
 			$("li#hotbar-box1").addClass("hotbar-box-active");
 			HotBar.currentActive = 1;
+			itemDetails(HotBar.currentActive);
 		break;
 		case 50: /*2*/ 
 			$("li.hotbar-box-active").removeClass("hotbar-box-active");
 			$("li#hotbar-box2").addClass("hotbar-box-active");
 			HotBar.currentActive = 2;
+			itemDetails(HotBar.currentActive);
 		break;
 		case 51: /*3*/ 
 			$("li.hotbar-box-active").removeClass("hotbar-box-active");
 			$("li#hotbar-box3").addClass("hotbar-box-active");
 			HotBar.currentActive = 3;
+			itemDetails(HotBar.currentActive);
 		break;
 		case 52: /*4*/ 
 			$("li.hotbar-box-active").removeClass("hotbar-box-active");
 			$("li#hotbar-box4").addClass("hotbar-box-active");
 			HotBar.currentActive = 4;
+			itemDetails(HotBar.currentActive);
 		break;
 		case 53: /*5*/ 
 			$("li.hotbar-box-active").removeClass("hotbar-box-active");
 			$("li#hotbar-box5").addClass("hotbar-box-active");
 			HotBar.currentActive = 5;
+			itemDetails(HotBar.currentActive);
 		break;
 		case 54: /*6*/ 
 			$("li.hotbar-box-active").removeClass("hotbar-box-active");
 			$("li#hotbar-box6").addClass("hotbar-box-active");
 			HotBar.currentActive = 6;
+			itemDetails(HotBar.currentActive);
 		break;
 		case 55: /*7*/ 
 			$("li.hotbar-box-active").removeClass("hotbar-box-active");
 			$("li#hotbar-box7").addClass("hotbar-box-active");
 			HotBar.currentActive = 7;
+			itemDetails(HotBar.currentActive);
+		break;
+		case 56: /*8*/ 
+			$("li.hotbar-box-active").removeClass("hotbar-box-active");
+			$("li#hotbar-box8").addClass("hotbar-box-active");
+			HotBar.currentActive = 8;
+			itemDetails(HotBar.currentActive);
 		break;
 	}
 
 }
 
 function onDocumentKeyUp( event ) {
+
+	if ( CONTROLLER_DISABLED ) { return; }
+
 	switch ( event.keyCode ) {
 		case 16: isShiftDown = false; break;
 
@@ -267,6 +392,30 @@ function onDocumentKeyUp( event ) {
 
 }
 
+function onDocumentWheel ( event ){
+	if(event.deltaY>0){
+		HotBar.currentActive++;
+		if(HotBar.currentActive == 9)
+		{
+			HotBar.currentActive = 1;
+		}
+		$("li.hotbar-box-active").removeClass("hotbar-box-active");
+		$("li#hotbar-box" + HotBar.currentActive).addClass("hotbar-box-active");
+		itemDetails(HotBar.currentActive);
+	}
+	else{ 
+		HotBar.currentActive--;
+		if(HotBar.currentActive == 0)
+		{
+			HotBar.currentActive = 8;
+		}
+		$("li.hotbar-box-active").removeClass("hotbar-box-active");
+		$("li#hotbar-box" + HotBar.currentActive).addClass("hotbar-box-active");
+		itemDetails(HotBar.currentActive);
+	}
+	console.log(HotBar.currentActive);
+}
+
 var spectateMode = true;
 
 let targetTurn = 0;
@@ -277,6 +426,8 @@ let vectorright = new THREE.Vector3(1,0,0);
 let speed = new THREE.Vector3(0,0,0);
 
 function processInput() {
+
+	if ( CONTROLLER_DISABLED ) { return; }
 	
 	if ( spectateMode ){
 		camera.lookAt( 0, 0, 0 );
@@ -327,15 +478,21 @@ function processInput() {
 		
 		let sx = x - x0;
 		let sy = y - y0;
+
+		if ( heightmap[x0] ){
+			if ( heightmap[x0][y0] ){ // make sure we're in bounds
+				let top = Perlin.lerp ( heightmap[x0][y0], heightmap[x1][y0], sx );
+				let bottom = Perlin.lerp ( heightmap[x0][y1], heightmap[x1][y1], sx );
+				let xlerp = Perlin.lerp ( top,bottom, sy );
+				let left = Perlin.lerp ( heightmap[x0][y0], heightmap[x0][y1], sy );
+				let right = Perlin.lerp ( heightmap[x1][y0], heightmap[x1][y1], sy );
+				let ylerp = Perlin.lerp ( left,right, sx );
+				let val = Perlin.lerp( xlerp, ylerp, 0.5 );
+				
+				camera.position.y = camera.position.y*0.8 + (val+300)*0.2;
+			}
+		}
 		
-		let top = Perlin.lerp ( heightmap[x0][y0], heightmap[x1][y0], sx );
-		let bottom = Perlin.lerp ( heightmap[x0][y1], heightmap[x1][y1], sx );
-		let xlerp = Perlin.lerp ( top,bottom, sy );
-		let left = Perlin.lerp ( heightmap[x0][y0], heightmap[x0][y1], sy );
-		let right = Perlin.lerp ( heightmap[x1][y0], heightmap[x1][y1], sy );
-		let ylerp = Perlin.lerp ( left,right, sx );
-		let val = Perlin.lerp( xlerp, ylerp, 0.5 );
-		
-		camera.position.y = camera.position.y*0.8 + (val+300)*0.2;
+
 	}
 }

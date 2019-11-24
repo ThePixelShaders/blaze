@@ -18,10 +18,10 @@ var ResourceManager = {
         this.counters.metal = document.getElementById("res_iron");
         this.counters.petrol = document.getElementById("res_petrol");
 
-        this.setResourceCount( ResourceTypes.wood, 7);
-        this.setResourceCount( ResourceTypes.stone, 7 );
-        this.setResourceCount( ResourceTypes.metal, 2);
-        this.setResourceCount( ResourceTypes.petrol, 1);
+        this.setResourceCount( ResourceTypes.wood, 30);
+        this.setResourceCount( ResourceTypes.stone, 30);
+        this.setResourceCount( ResourceTypes.metal, 4);
+        this.setResourceCount( ResourceTypes.petrol, 0);
     },
 
     setResourceCount : function( type, count ) {
@@ -44,7 +44,26 @@ var ResourceManager = {
                 break;
         }
     },
-
+/*
+    getResourceCount : function (type)
+    {
+        switch( type ){
+            case ResourceTypes.wood:
+                return this.resources[ResourceTypes.wood];
+                break;
+            case ResourceTypes.stone:
+                return this.resources[ResourceTypes.stone];
+                break;
+            case ResourceTypes.metal:
+                return this.resources[ResourceTypes.metal];
+                break;
+            case ResourceTypes.petrol:
+                return this.resources[ResourceTypes.petrol];
+                break;
+        }
+        return 0;
+    },
+*/
     getResourceCount : function ( type ){
         return this.resources[type];
     }
@@ -60,5 +79,19 @@ function logDiv( text ) { upperDiv.innerHTML += text + "<br>"; }
 
 // this is the login div
 var middleDiv = document.getElementById("middle");
+var usernameField = document.getElementById("username");
 
-//middleDiv.style.visibility = "hidden"; 
+var LoginFunctionality = {
+
+    sendNickname : function(){
+        //alert("hello")
+        CONTROLLER_DISABLED = false;
+        middleDiv.style.display = "none";
+        let nickname = usernameField.value;
+        //alert(nickname)
+        SceneManager.nickname = nickname;
+        socket.emit("sendNickname", nickname);
+    }
+}
+
+//middleDiv.style.display = "none"; 

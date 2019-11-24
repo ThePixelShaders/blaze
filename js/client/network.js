@@ -53,14 +53,19 @@ socket.on('mapseed', function(seed){
 	}
 });
 
+//socket.broadcast.emit('playerNickname',socket.id,nickname)
+socket.on('playerNickname', function(socketid, nick){
+	playerNicknames[socketid] = nick;
+});
+
 socket.on("setOwnerID", function(socketID) {
 	console.log("Received owner id : " + socketID);
 	SceneManager.ownerID = socketID;
 })
 
 socket.on('setSpawnPoint', function( x, y ){
-	SceneManager.addTotem( x, y, TotemTypes.residential, true );
-	socket.emit( "placeTotem", x, y, TotemTypes.residential );
+	SceneManager.addTotem( x, y, TotemTypes.house2, true );
+	socket.emit( "placeTotem", x, y, TotemTypes.house2 );
 	console.log("Spawnpoint set at " + x + ' ' + y );
 
 	spectateMode = false;
@@ -74,9 +79,22 @@ socket.on('setSpawnPoint', function( x, y ){
 	camera.lookAt( currentX-250, 0 , currentY-250 );
 })
 
-
 socket.on('placeTotem', function(x,y,type, owner){
-	SceneManager.addTotem( x, y, type, true );
+	if ( owner == "none" )
+		SceneManager.addTotem( x, y, type, true, true );
+	else{
+		SceneManager.addTotem( x, y, type, true );
+	}
+	
+	SceneManager.ownerMap[x][y] = owner;
+});
+
+socket.on('setTotem', function(x,y,type, owner){
+	if ( owner == "none" )
+		SceneManager.setTotem( x, y, type, true, true );
+	else{
+		SceneManager.setTotem( x, y, type, true );
+	}
 	SceneManager.ownerMap[x][y] = owner;
 });
 

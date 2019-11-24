@@ -47,8 +47,8 @@
 			
 			#resourceScreen {
 				position: absolute;
-				bottom: 20px;
-				right: 10px;
+				bottom: 0;
+				right: 0;
 			}
 			#resourceScreen ul {
 				position: relative;
@@ -62,6 +62,7 @@
 				float: left;
 				display: block;
 				text-align: center;
+				padding: 10px;
 			}
 			#res_container {
 				text-align: center;
@@ -96,7 +97,6 @@
 				width: 300px;
 				left: 0; 
 				top:25%;
-				
 			}
 			
 			.textArea
@@ -117,9 +117,9 @@
 				padding: 5%;
 				overflow: hidden;
 				background: #0f6600a8;
-				border-style: dashed;
+				border-style: solid;
 				border-width: 5px;
-				border-color: black;
+				border-color: #0b4104;
 				color : white;
 			}
 			
@@ -161,24 +161,27 @@
 				position:absolute;
 				/* bottom: 10px;
 				left:37%; */
-   				left: 50%; /* position the left edge of the element at the middle of the parent */
-				bottom: 5px;
-				transform: translate(-46%, -16%);
+   				left: 43%; /* position the left edge of the element at the middle of the parent */
+				bottom: 0px;
+				transform: translate(-39%);
 			}
 
 			.ui-element{
 				margin: 0;
 				padding: 0;
-				overflow: hidden;
 				background: #0f6600e6;
-				border-style: dashed;
+				overflow: hidden;
+				border-style: solid;
 				border-width: 5px;
-				border-color: black;
+				border-color: #0b4104;
 				color : white;
 				border-radius: 5px;
+
+				/* transform: scale(0.7); */
 			}
 			#hotbar ul{
 				list-style-type: none;
+				height: 110px;
 			}
 			#hotbar ul li{
 				float: left;
@@ -196,6 +199,7 @@
 
 			#additionalText {
 				position: absolute;
+				max-width: 150px;
 				bottom: 50px;
 				left: 5%;
 			}
@@ -212,6 +216,18 @@
 				border: none;
 			}
 
+			#item-details{
+				font-size: 12px;
+				position: absolute;
+				bottom: 110px;
+				right: 0px;
+				padding: 5px;
+			}
+
+			.priceSpan{
+				font-size: 16px;
+				font-weight: bold;
+			}
 
 			@media only screen and (max-width: 1530px) {
 				#hotbar ul li{
@@ -234,8 +250,7 @@
 	
 		<link href='css/index.css' rel='stylesheet' type='text/css'>
 
-		
-		<div id="middle" hidden>
+		<div id="middle">
 			<div class="ui-element">
 				<div class = "textArea">
 					<h1>Login</h1>
@@ -244,12 +259,21 @@
 					<input type="text" value="" placeholder="Username" id="username" />
 				</div>
 				<div class = "textArea">
-					<button>Submit</button>
+					<button onclick="LoginFunctionality.sendNickname()">Submit</button>
 				</div>
 			</div>
 		</div>
 		
 		<div id="additionalText" class="ui-element">
+		</div>
+
+		<div id="item-details" class="ui-element">
+			<p id="woodPrice">Wood: <span class="priceSpan">2</span></p>
+			<p id="rocksPrice">Rocks: <span class="priceSpan">4</span></p>
+			<p id="metalPrice"></p>
+			<div style="width:150px">
+				<p id="item-description">description</p>
+			</div>
 		</div>
 
 		<div id="resourceScreen" class="ui-element">
@@ -326,6 +350,10 @@
 				<li id="hotbar-box7"><img src="textures/tower-icon.png" style="width: 50px; height: 50px;">
 					<p>Tower</p>
 				</li>
+
+				<li id="hotbar-box8"><img src="textures/sapling-icon.png" style="width: 50px; height: 50px;">
+					<p>Plant tree</p>
+				</li>
 			</ul>
 
 		</div>
@@ -347,9 +375,11 @@
 		<script src="js/client/additionalText.js"></script>
 		<script src="js/client/totemloader.js"></script>
 		<script src="js/client/scenemanager.js"></script>
+		<script src="js/client/totemShower.js"></script>
 		<script src="js/client/controller.js"></script>
 		<script src="js/client/gui.js"></script>
 		<script src="config.js"></script>
+		<script src="js/client/item_details.js"></script>
 		<script src="js/client/network.js"></script>
 		<script src="js/client/clock.js"></script>
 		<script src="js/client/cooldown.js"></script>

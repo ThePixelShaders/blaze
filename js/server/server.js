@@ -17,8 +17,8 @@ var waterlevel = 202;
 
 // For serverside checks
 console.log("Generating terrain...");
-var heightmap = Generator.generateTerrain(mapseed);
-var initialTotemMap = Generator.generateTotemMap(heightmap,mapseed);
+var heightmap = Generator.Generator.generateTerrain(mapseed);
+var initialTotemMap = Generator.Generator.generateTotemMap(heightmap,mapseed);
 console.log("Done!");
 
 var totemMap = []; // a clone of the initial, the initial one is left unaltered for keeping track of changes
@@ -47,10 +47,10 @@ var OwnershipManager = {
 	}
 }*/
 
-for ( let x = 0; x < Generator.WORLD_WIDTH; x++ ){
+for ( let x = 0; x < Generator.Generator.WORLD_WIDTH; x++ ){
 	totemMap[x] = [];
 	ownerMap[x] = [];
-	for ( let y = 0; y < Generator.WORLD_HEIGHT; y++ ){
+	for ( let y = 0; y < Generator.Generator.WORLD_HEIGHT; y++ ){
 		totemMap[x][y] = initialTotemMap[x][y];
 		ownerMap[x][y]= "none";
 	}
@@ -68,8 +68,8 @@ var SpawnManager = {
 	// Computes the spaces available to spawn at
 	computeAvailableSpaces : function (){
 		this.availableSpaces = []; // wipe the other array
-		for ( let x = this.marginoffset; x < Generator.WORLD_WIDTH - this.marginoffset; x++ ){
-			for ( let y = this.marginoffset; y < Generator.WORLD_HEIGHT - this.marginoffset; y++ ){
+		for ( let x = this.marginoffset; x < Generator.Generator.WORLD_WIDTH - this.marginoffset; x++ ){
+			for ( let y = this.marginoffset; y < Generator.Generator.WORLD_HEIGHT - this.marginoffset; y++ ){
 				// if the current tile is between the minimum and maximum water levels, people can spawn there
 				if ( heightmap[x][y] > waterlevel + this.waterLevelOffset && heightmap[x][y] < waterlevel + this.maximumLevelDifference + this.waterLevelOffset ){
 					this.availableSpaces.push( { x: x, y: y } );
@@ -145,6 +145,11 @@ io.on('connection', function(socket){
 
 
 	});
+
+	socket.on('sendNickname', function(nickname){
+		console.log ( "socket " + socket.id + ' nickname : ' + nickname )
+		socket.broadcast.emit('playerNickname',socket.id,nickname)
+	});
 	
 	socket.on('requestdeltas', function(){
 		if ( deltaBuffer.length > 0 ){
@@ -153,11 +158,29 @@ io.on('connection', function(socket){
 		}
 	});
 	
-	socket.on('placeTotem', function(x,y,type){
+	socket.on('placeTotem', function(x,y,type ,notOwned){
 		//console.log("placed totem " + type + " at coords : " + x + " " + y);
+
+		if ( type == Generator.TotemTypes.sappling ){
+			setTimeout( function(x,y){
+				console.log(totemMap[x][y])
+				if ( totemMap[x][y] == Generator.TotemTypes.sappling ){
+					console.log("sending stuff")
+					io.emit('setTotem',x,y,Generator.TotemTypes.forest, "none");
+					removeTotem(x,y);
+					placeTotem(x,y,Generator.TotemTypes.forest,"none");
+				}
+			}, 8000, x, y)
+		}
+
 		placeTotem( x, y,type, socket.id );
-		console.log( x + ' ' + y + ' ' + type + ' ' + socket.id);
-		socket.broadcast.emit('placeTotem',x,y,type, socket.id);
+		//console.log( x + ' ' + y + ' ' + type + ' ' + socket.id);
+		if ( notOwned ){
+			socket.broadcast.emit('placeTotem',x,y,type, "none");
+		}else{
+			socket.broadcast.emit('placeTotem',x,y,type, socket.id);
+		}
+
 	});
 	
 	socket.on('removeTotem', function(x,y){
