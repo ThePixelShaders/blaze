@@ -59,6 +59,7 @@ function onWindowResize() {
 }
 
 function render() {
+	moveCannonballs();
 	processInput();
 	
 	SceneManager.update();
