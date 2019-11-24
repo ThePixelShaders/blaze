@@ -79,5 +79,19 @@ function logDiv( text ) { upperDiv.innerHTML += text + "<br>"; }
 
 // this is the login div
 var middleDiv = document.getElementById("middle");
+var usernameField = document.getElementById("username");
 
-//middleDiv.style.visibility = "hidden"; 
+var LoginFunctionality = {
+
+    sendNickname : function(){
+        //alert("hello")
+        CONTROLLER_DISABLED = false;
+        middleDiv.style.display = "none";
+        let nickname = usernameField.value;
+        //alert(nickname)
+        SceneManager.nickname = nickname;
+        socket.emit("sendNickname", nickname);
+    }
+}
+
+//middleDiv.style.display = "none"; 
