@@ -19,6 +19,17 @@ function checkIfTotemInRange( x, y, type, range ){
 	return false;
 }
 
+function checkIfFriendlyTotemInRange( x, y, range ){
+	for ( let itx = x-range; itx <= x + range; itx++ ){
+		for ( let ity = y-range; ity <= y+ range; ity++ ){
+			if ( SceneManager.ownerMap[itx][ity] == SceneManager.ownerID ){
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 function onDocumentMouseMove( event ) {
 	event.preventDefault();
 	
@@ -57,6 +68,41 @@ function onDocumentMouseMove( event ) {
 	}
 }
 
+/*
+var ResourceTypes = {
+    wood: 1,
+    stone: 2,
+    metal: 3,
+    petrol: 4
+}
+*/
+
+var RecipeManager = {
+	recipes:{
+		lumberjack: [0,4,2,0,0],
+		mine: [0,12,1,0,0],
+		//factory: [0,]
+	},
+
+	gotMaterial : function( recipe ){
+		for ( let i = 1; i <= 4; i++ ){
+			if ( ResourceManager.getResourceCount(i) < recipe[i] ){
+				return false;
+			}
+		}
+		return true;
+	},
+
+	consumeMaterial : function( recipe ){
+		for ( let i = 1; i <= 4; i++ ){
+			if ( recipe[i] > 0 ){
+				ResourceManager.setResourceCount(i,ResourceManager.getResourceCount(i)-recipe[i])
+			}
+		}
+	}
+
+}
+
 function onDocumentMouseDown( event ) {
 	
 	//console.log( event.srcElement.nodeName )
@@ -78,38 +124,53 @@ function onDocumentMouseDown( event ) {
 			let tX = ( intersect.object.position.x + 2125 ) / 50;
 			let tZ = ( intersect.object.position.z + 2125 ) / 50;
 
+			if ( !isCooldownReady() ){
+				additionalText.displayText("Wait for the cooldown to finish!");
+			}else{
 
-			switch( SceneManager.totemMap[tX][tZ] ){
-				case TotemTypes.forest:
-					if ( checkIfTotemInRange(tX,tZ,TotemTypes.lumber1, 4) ){ // if there is a lumberjack nearby
-						// cut the forest
+				switch( SceneManager.totemMap[tX][tZ] ){
+					case TotemTypes.forest:
+						if ( checkIfTotemInRange(tX,tZ,TotemTypes.lumber1, 4) ){ // if there is a lumberjack nearby
+							// cut the forest
 
-						//ResourceManager.
+							
+								//ResourceManager.
 
+								SceneManager.removeTotem( tX, tZ, true );
+								socket.emit("removeTotem",tX,tZ);
+
+								setCooldown(3000, "Cutting Forest...")
+
+								var woodCount = ResourceManager.getResourceCount(ResourceTypes.wood);
+								woodCount = woodCount + Math.floor(Math.random() * 2) + 4;
+								ResourceManager.setResourceCount(ResourceTypes.wood, woodCount);
+
+						}else {
+							// set warning that you're trying to cut forest too far away
+							additionalText.displayText("You're trying to cut a forest too far away from a lumberjack");
+						}
+						break;
+					case TotemTypes.rocky:
+						if ( checkIfTotemInRange(tX,tZ,TotemTypes.mine, 4) ){ // if there is a lumberjack nearby
+							SceneManager.removeTotem( tX, tZ, true );
+							socket.emit("removeTotem",tX,tZ);
+
+							setCooldown(3000, "Mining Rocks...")
+
+							var stoneCount = ResourceManager.getResourceCount(ResourceTypes.stone);
+							stoneCount = stoneCount + Math.floor(Math.random() * 4) + 6;
+							ResourceManager.setResourceCount(ResourceTypes.stone, stoneCount);
+						}else {
+							// set warning that you're trying to cut forest too far away
+							additionalText.displayText("You're trying to mine rocks too far away from a mine");
+						}
+
+						break;
+					default:
 						SceneManager.removeTotem( tX, tZ, true );
 						socket.emit("removeTotem",tX,tZ);
+				}
 
-						var woodCount = ResourceManager.getResourceCount(ResourceTypes.wood);
-						woodCount = woodCount + Math.floor(Math.random() * 2) + 4;
-						ResourceManager.setResourceCount(ResourceTypes.wood, woodCount);
-					}else {
-						// set warning that you're trying to cut forest too far away
-						additionalText.displayText("You're trying to cut a forest too far away from a lumberjack");
-					}
-					break;
-				case TotemTypes.rocky:
-
-					SceneManager.removeTotem( tX, tZ, true );
-					socket.emit("removeTotem",tX,tZ);
-
-					var woodCount = ResourceManager.getResourceCount(ResourceTypes.wood);
-					woodCount = woodCount + Math.floor(Math.random() * 4) + 6;
-					ResourceManager.setResourceCount(ResourceTypes.wood, woodCount);
-
-					break;
-				default:
-					SceneManager.removeTotem( tX, tZ, true );
-					socket.emit("removeTotem",tX,tZ);
 			}
 			
 
@@ -135,24 +196,45 @@ function onDocumentMouseDown( event ) {
 				socket.emit( "placeTotem", tX, tZ, TotemTypes.residential );
 			}*/
 
-			let totemtype = HotBar.getCurrentActive();
-			
-			if (totemtype == TotemTypes.lumber1)
-			{
-				if (ResourceManager.getResourceCount(ResourceTypes.wood) >= 4 &&
-					ResourceManager.getResourceCount(ResourceTypes.stone) >= 2)
-				{
-					SceneManager.addTotem( tX, tZ, totemtype );
-					//additionalText.displayText("You need ");
-					ResourceManager.setResourceCount(ResourceTypes.wood, ResourceManager.getResourceCount() - 4);
-					ResourceManager.setResourceCount(ResourceTypes.stone, ResourceManager.getResourceCount() - 2);
+			if ( heightmap[tX][tZ] < SceneManager.waterlevel ){
+				additionalText.displayText("You're attempting to place underwater!");
+			}else{
+				if ( !isCooldownReady() ){
+					additionalText.displayText("Wait for the cooldown to finish!");
+				}else{
+
+					// Checks if you're attempting to build in a range of maximum 5 meters from a nearby structure you own
+					if ( !checkIfFriendlyTotemInRange( tX, tZ, 5 ) ){
+						additionalText.displayText("Too far away from your structures!");
+					}else{
+
+						let totemtype = HotBar.getCurrentActive();
+
+						switch( totemtype ){
+							case TotemTypes.lumber1:
+								if ( RecipeManager.gotMaterial( RecipeManager.recipes.lumberjack ) )
+								{
+									SceneManager.addTotem( tX, tZ, totemtype, true );
+									socket.emit( "placeTotem", tX, tZ, totemtype );
+									//additionalText.displayText("You need ");
+									RecipeManager.consumeMaterial( RecipeManager.recipes.lumberjack )
+									//ResourceManager.setResourceCount(ResourceTypes.wood, ResourceManager.getResourceCount(ResourceTypes.wood) - 4);
+									//ResourceManager.setResourceCount(ResourceTypes.stone, ResourceManager.getResourceCount(ResourceTypes.stone) - 2);
+									//let debug = ResourceManager.resources;
+									//debugger;
+								}else{
+									additionalText.displayText("Not enough resources for lumberjack!");
+								}
+
+								break;
+							default:
+								SceneManager.addTotem( tX, tZ, totemtype, true );
+								socket.emit( "placeTotem", tX, tZ, totemtype );
+						}
+					}
 				}
 			}
-			else
-			{
-				SceneManager.addTotem( tX, tZ, totemtype );
-			}
-			socket.emit( "placeTotem", tX, tZ, totemtype );
+			
 		}
 	}
 }
@@ -199,6 +281,7 @@ function onDocumentKeyDown( event ) {
 			$("li.hotbar-box-active").removeClass("hotbar-box-active");
 			$("li#hotbar-box1").addClass("hotbar-box-active");
 			HotBar.currentActive = 1;
+			itemDetails("2","4","","", description);
 		break;
 		case 50: /*2*/ 
 			$("li.hotbar-box-active").removeClass("hotbar-box-active");
@@ -325,15 +408,21 @@ function processInput() {
 		
 		let sx = x - x0;
 		let sy = y - y0;
+
+		if ( heightmap[x0] ){
+			if ( heightmap[x0][y0] ){ // make sure we're in bounds
+				let top = Perlin.lerp ( heightmap[x0][y0], heightmap[x1][y0], sx );
+				let bottom = Perlin.lerp ( heightmap[x0][y1], heightmap[x1][y1], sx );
+				let xlerp = Perlin.lerp ( top,bottom, sy );
+				let left = Perlin.lerp ( heightmap[x0][y0], heightmap[x0][y1], sy );
+				let right = Perlin.lerp ( heightmap[x1][y0], heightmap[x1][y1], sy );
+				let ylerp = Perlin.lerp ( left,right, sx );
+				let val = Perlin.lerp( xlerp, ylerp, 0.5 );
+				
+				camera.position.y = camera.position.y*0.8 + (val+300)*0.2;
+			}
+		}
 		
-		let top = Perlin.lerp ( heightmap[x0][y0], heightmap[x1][y0], sx );
-		let bottom = Perlin.lerp ( heightmap[x0][y1], heightmap[x1][y1], sx );
-		let xlerp = Perlin.lerp ( top,bottom, sy );
-		let left = Perlin.lerp ( heightmap[x0][y0], heightmap[x0][y1], sy );
-		let right = Perlin.lerp ( heightmap[x1][y0], heightmap[x1][y1], sy );
-		let ylerp = Perlin.lerp ( left,right, sx );
-		let val = Perlin.lerp( xlerp, ylerp, 0.5 );
-		
-		camera.position.y = camera.position.y*0.8 + (val+300)*0.2;
+
 	}
 }

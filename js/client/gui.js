@@ -19,7 +19,7 @@ var ResourceManager = {
         this.counters.petrol = document.getElementById("res_petrol");
 
         this.setResourceCount( ResourceTypes.wood, 7);
-        this.setResourceCount( ResourceTypes.stone, 7 );
+        this.setResourceCount( ResourceTypes.stone, 7);
         this.setResourceCount( ResourceTypes.metal, 2);
         this.setResourceCount( ResourceTypes.petrol, 1);
     },
