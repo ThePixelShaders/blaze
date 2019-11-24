@@ -1,6 +1,6 @@
 var HotBar = {
 	currentActive : 1,
-	hotbarMapping : [ TotemTypes.empty, TotemTypes.house1, TotemTypes.lumber1, TotemTypes.mine, TotemTypes.petrol, TotemTypes.nuclearplant, TotemTypes.cannon, TotemTypes.tower ],
+	hotbarMapping : [ TotemTypes.empty, TotemTypes.house1, TotemTypes.lumber1, TotemTypes.mine, TotemTypes.petrol, TotemTypes.nuclearplant, TotemTypes.cannon, TotemTypes.tower, TotemTypes.sappling ],
 
 	// this returns a TotemType
 	getCurrentActive : function(){
@@ -140,8 +140,6 @@ function onDocumentMouseDown( event ) {
 					case TotemTypes.forest:
 						if ( checkIfTotemInRange(tX,tZ,TotemTypes.lumber1, 4) ){ // if there is a lumberjack nearby
 							// cut the forest
-
-							
 								//ResourceManager.
 
 								SceneManager.removeTotem( tX, tZ, true );
@@ -226,6 +224,7 @@ function onDocumentMouseDown( event ) {
 									socket.emit( "placeTotem", tX, tZ, totemtype );
 									//additionalText.displayText("You need ");
 									RecipeManager.consumeMaterial( RecipeManager.recipes.lumberjack )
+									setCooldown(3000, "Building Lumberjack...")
 									//ResourceManager.setResourceCount(ResourceTypes.wood, ResourceManager.getResourceCount(ResourceTypes.wood) - 4);
 									//ResourceManager.setResourceCount(ResourceTypes.stone, ResourceManager.getResourceCount(ResourceTypes.stone) - 2);
 									//let debug = ResourceManager.resources;
@@ -235,10 +234,18 @@ function onDocumentMouseDown( event ) {
 								}
 
 								break;
+							case TotemTypes.sappling:
+								SceneManager.addTotem( tX, tZ, totemtype, true, true ); // animated, not owned ( last true, true )
+								socket.emit( "placeTotem", tX, tZ, totemtype, true ); // not owned
+								//additionalText.displayText("You need ");
+								RecipeManager.consumeMaterial( RecipeManager.recipes.lumberjack )
+								setCooldown(3000, "Building Lumberjack...")
+								break;	
 							default:
 								addTotemInList(totemtype, tX, tZ);
 								SceneManager.addTotem( tX, tZ, totemtype, true );
 								socket.emit( "placeTotem", tX, tZ, totemtype );
+								setCooldown(3000, "Building...")
 						}
 					}
 				}

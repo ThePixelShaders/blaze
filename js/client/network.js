@@ -79,7 +79,6 @@ socket.on('setSpawnPoint', function( x, y ){
 	camera.lookAt( currentX-250, 0 , currentY-250 );
 })
 
-
 socket.on('placeTotem', function(x,y,type, owner){
 	SceneManager.addTotem( x, y, type, true );
 	SceneManager.ownerMap[x][y] = owner;

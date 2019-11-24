@@ -20,6 +20,7 @@ var TotemTypes = {
 	house2: 13,
 	tower: 14,
 	mark: 15,
+	sappling: 16
 };
 
 

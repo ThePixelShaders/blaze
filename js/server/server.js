@@ -158,11 +158,16 @@ io.on('connection', function(socket){
 		}
 	});
 	
-	socket.on('placeTotem', function(x,y,type){
+	socket.on('placeTotem', function(x,y,type ,notOwned){
 		//console.log("placed totem " + type + " at coords : " + x + " " + y);
 		placeTotem( x, y,type, socket.id );
-		console.log( x + ' ' + y + ' ' + type + ' ' + socket.id);
-		socket.broadcast.emit('placeTotem',x,y,type, socket.id);
+		//console.log( x + ' ' + y + ' ' + type + ' ' + socket.id);
+		if ( notOwned ){
+			socket.broadcast.emit('placeTotem',x,y,type, "none");
+		}else{
+			socket.broadcast.emit('placeTotem',x,y,type, socket.id);
+		}
+
 	});
 	
 	socket.on('removeTotem', function(x,y){
