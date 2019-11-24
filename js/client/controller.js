@@ -281,6 +281,7 @@ function onDocumentKeyDown( event ) {
 			$("li.hotbar-box-active").removeClass("hotbar-box-active");
 			$("li#hotbar-box1").addClass("hotbar-box-active");
 			HotBar.currentActive = 1;
+			itemDetails("2","4","","", description);
 		break;
 		case 50: /*2*/ 
 			$("li.hotbar-box-active").removeClass("hotbar-box-active");
