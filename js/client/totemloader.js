@@ -84,6 +84,9 @@ var TotemLoader = {
 			case TotemTypes.sappling:
 				totem = TotemLoader.totems.sappling.clone();
 				break;
+			case TotemTypes.mark:
+				totem = TotemLoader.totems.mark.clone();
+				break;
 		}
 		
 		if ( totem == null ){
