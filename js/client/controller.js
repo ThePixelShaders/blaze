@@ -281,37 +281,49 @@ function onDocumentKeyDown( event ) {
 			$("li.hotbar-box-active").removeClass("hotbar-box-active");
 			$("li#hotbar-box1").addClass("hotbar-box-active");
 			HotBar.currentActive = 1;
-			itemDetails("2","4","","", description);
+			itemDetails("2","4","", "description");
 		break;
 		case 50: /*2*/ 
 			$("li.hotbar-box-active").removeClass("hotbar-box-active");
 			$("li#hotbar-box2").addClass("hotbar-box-active");
 			HotBar.currentActive = 2;
+			itemDetails("5","3","", "description");
 		break;
 		case 51: /*3*/ 
 			$("li.hotbar-box-active").removeClass("hotbar-box-active");
 			$("li#hotbar-box3").addClass("hotbar-box-active");
 			HotBar.currentActive = 3;
+			itemDetails("6","2","4", "description");
 		break;
 		case 52: /*4*/ 
 			$("li.hotbar-box-active").removeClass("hotbar-box-active");
 			$("li#hotbar-box4").addClass("hotbar-box-active");
 			HotBar.currentActive = 4;
+			itemDetails("7","2","5", "description");
 		break;
 		case 53: /*5*/ 
 			$("li.hotbar-box-active").removeClass("hotbar-box-active");
 			$("li#hotbar-box5").addClass("hotbar-box-active");
 			HotBar.currentActive = 5;
+			itemDetails("2","4","6", "description");
 		break;
 		case 54: /*6*/ 
 			$("li.hotbar-box-active").removeClass("hotbar-box-active");
 			$("li#hotbar-box6").addClass("hotbar-box-active");
 			HotBar.currentActive = 6;
+			itemDetails("2","1","4", "description");
 		break;
 		case 55: /*7*/ 
 			$("li.hotbar-box-active").removeClass("hotbar-box-active");
 			$("li#hotbar-box7").addClass("hotbar-box-active");
 			HotBar.currentActive = 7;
+			itemDetails("2","4","32", "description");
+		break;
+		case 56: /*8*/ 
+			$("li.hotbar-box-active").removeClass("hotbar-box-active");
+			$("li#hotbar-box8").addClass("hotbar-box-active");
+			HotBar.currentActive = 8;
+			itemDetails("1","","", "description");
 		break;
 	}
 
