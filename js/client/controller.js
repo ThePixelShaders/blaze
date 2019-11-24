@@ -181,7 +181,6 @@ function onDocumentMouseDown( event ) {
 						SceneManager.removeTotem( tX, tZ, true );
 						socket.emit("removeTotem",tX,tZ);
 				}
-
 			}
 			
 
@@ -222,6 +221,19 @@ function onDocumentMouseDown( event ) {
 						let totemtype = HotBar.getCurrentActive();
 
 						switch( totemtype ){
+							case TotemTypes.house1:
+									if ( RecipeManager.gotMaterial( RecipeManager.recipes.house ) )
+									{
+										SceneManager.addTotem( tX, tZ, totemtype, true );
+										socket.emit( "placeTotem", tX, tZ, totemtype );
+										RecipeManager.consumeMaterial( RecipeManager.recipes.house );
+										setCooldown(3000, "Building House...");
+									}
+									else
+									{
+										additionalText.displayText("Not enough resources for lumberjack!");
+									}
+								break;
 							case TotemTypes.lumber1:
 								if ( RecipeManager.gotMaterial( RecipeManager.recipes.lumberjack ) )
 								{
