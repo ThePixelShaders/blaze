@@ -228,6 +228,7 @@ function onDocumentMouseDown( event ) {
 
 								break;
 							default:
+								addTotemInList(totemtype, tX, tZ);
 								SceneManager.addTotem( tX, tZ, totemtype, true );
 								socket.emit( "placeTotem", tX, tZ, totemtype );
 						}
