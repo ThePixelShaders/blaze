@@ -229,6 +229,40 @@
 				font-weight: bold;
 			}
 
+			#polution-bar{
+				font-size: 12px;
+				position: absolute;
+				top: 20px;
+				left: 10px;
+				width:300px;
+				height:20px;
+			}
+
+			#outside-polution-bar{
+				margin: 0;
+				padding:0;
+				overflow: hidden;
+				background: rgb(0, 0, 0);
+				border-width: 4px;
+				border-style: solid;
+				border-color: black;
+				height: 15px;
+				width: 100%;
+				height: 100%;
+				border-radius: 5px 5px 5px 5px;
+			}
+
+			#inside-polution-bar{
+				margin: 0;
+				padding:0;
+				overflow: hidden;
+				background: rgb(107, 165, 0);
+				height: 15px;
+				width: 0;
+				height: 100%;
+				border-radius: 5px 5px 5px 5px;
+			}
+
 			@media only screen and (max-width: 1530px) {
 				#hotbar ul li{
 					width:70px;
@@ -242,12 +276,38 @@
 				}
 			}
 
+			#rising{
+				position: absolute;
+				top: 124px;
+				right: 427px;
+				font-size: 46px;
+				color: white;
+				display:none;
+			}
 		</style>
+
+		<script>
+			function displayText(){
+				var text = document.getElementById("rising");
+				text.style.display = "block";
+			}
+			function endDisplayText(){
+				var text = document.getElementById("rising");
+				text.style.display = "none";
+			}
+		</script>
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	</head>
 	<body>
 	
+		<div id="rising">
+			The icebergs are melting! The water level is rising!
+		</div>
+
+		<div style="width:100%; height:100%; display:none" id="deathscreen">
+			<img src="textures/death.jpg" style="z-index:-100">
+		</div>
 		<link href='css/index.css' rel='stylesheet' type='text/css'>
 
 		<div id="middle">
@@ -305,15 +365,21 @@
 				</li>
 			</ul>
 
-
-
 		</div>
 
-		<div id = "clock" style="border: none">
-				<div class = "ui-element" style="border: none; padding: 10px;">
-						1:0
+		<div id="polution-bar">
+			<div id="outside-polution-bar">
+				<div id="inside-polution-bar">
+
 				</div>
+			</div>
 		</div>
+
+		<!-- <div id = "clock" style="border: none">
+				<div class = "ui-element" style="border: none; padding: 10px;">
+						0:0
+				</div>
+		</div> -->
 	
 		
 		<div id="hotbar">
@@ -363,7 +429,10 @@
 
 		<div id="info">
 		</div>
+
 		
+	
+
 		<script src="https://cdn.socket.io/socket.io-1.7.3.js"></script>
 		<script src="config.js"></script>
 		<script src="three/three.min.js"></script>
@@ -375,7 +444,6 @@
 		<script src="js/client/additionalText.js"></script>
 		<script src="js/client/totemloader.js"></script>
 		<script src="js/client/scenemanager.js"></script>
-		<script src="js/client/totemShower.js"></script>
 		<script src="js/client/controller.js"></script>
 		<script src="js/client/gui.js"></script>
 		<script src="config.js"></script>
@@ -383,6 +451,7 @@
 		<script src="js/client/network.js"></script>
 		<script src="js/client/clock.js"></script>
 		<script src="js/client/cooldown.js"></script>
+		<script src="js/client/polutionBar.js"></script>
 		<script src="index.js"></script>
 
 	</body>

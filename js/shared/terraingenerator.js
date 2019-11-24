@@ -109,9 +109,9 @@ var Generator = {
 		  for (let y = 0; y < this.WORLD_HEIGHT; y++) {
 			  totems[x][y] = TotemTypes.empty;
 			if ( heightmap[x][y] > 105 ){
-				if ((Perlin.hashing_PRNG() * 0.5) + 0.5 <= 1.0/18.0 )
+				if ((Perlin.hashing_PRNG() * 0.5) + 0.5 <= 1.0/14.0 )
 					totems[x][y] = TotemTypes.forest;
-				else if ((Perlin.hashing_PRNG() * 0.5) + 0.5 <= 1.0 / 10)
+				else if ((Perlin.hashing_PRNG() * 0.5) + 0.5 <= 1.0 / 8)
 					totems[x][y] = TotemTypes.rocky;
 			}
 		  }

@@ -13,7 +13,7 @@ admin.notify("Server booted");
 
 
 // WARNING : HARDCODED TO MATCH THE CLIENT VALUE
-var waterlevel = 202;
+var waterlevel = 102;
 
 // For serverside checks
 console.log("Generating terrain...");
@@ -56,6 +56,14 @@ for ( let x = 0; x < Generator.Generator.WORLD_WIDTH; x++ ){
 	}
 }
 
+function checkSpotAvailable( x, y ){
+	if ( totemMap[x][y] == Generator.TotemTypes.empty ){
+		return true;
+	}else{
+		return false;
+	}
+}
+
 // This objects holds data about the available places on the map, for spawning
 var SpawnManager = {
 	maximumLevelDifference: 30, // Maximum level difference between water level and possible spawn locations
@@ -79,15 +87,20 @@ var SpawnManager = {
 	},
 
 	dispatchSpawnPoint : function(){
-		// randum = random in range : 0 - availableSpaces.length
-		let randnum = Math.floor(Math.random() * this.availableSpaces.length);
+		while ( this.availableSpaces.length > 0 ){
+			// randum = random in range : 0 - availableSpaces.length
+			let randnum = Math.floor(Math.random() * this.availableSpaces.length);
 
-		let spawnpoint = this.availableSpaces[randnum];
+			let spawnpoint = this.availableSpaces[randnum];
 
-		// remove from availableSpaces
-		this.availableSpaces.splice(randnum, 1);
+			// remove from availableSpaces
+			this.availableSpaces.splice(randnum, 1);
+			
+			if ( checkSpotAvailable( spawnpoint.x, spawnpoint.y ) )
+				return spawnpoint;
+		}
+		console.log("error : no more available spawn points");
 
-		return spawnpoint;
 	}
 }
 
@@ -119,6 +132,35 @@ function removeTotem( x, y ){
 	//console.log(deltaBuffer);
 }
 
+function requestTotemCleanup(){
+	for ( let x = 0; x < Generator.Generator.WORLD_WIDTH; x++ ){
+		for ( let y = 0; y < Generator.Generator.WORLD_HEIGHT; y++ ){
+			if ( heightmap[x][y] < waterlevel ){
+				if ( totemMap[x][y] != 0 ){
+					removeTotem(x,y)
+					io.emit('removeTotem',x,y);
+				}
+			}
+		}
+	}
+}
+
+var serverTimer = 120;
+//var phase = 3;
+// the clock
+setInterval(function(){
+	serverTimer--;
+	io.emit("waveTimer", serverTimer)
+	if ( serverTimer < 0 ){
+		// trigger the water expansion
+		serverTimer = 120;
+		waterlevel += 50;
+		SpawnManager.computeAvailableSpaces();
+		requestTotemCleanup()
+		io.emit("waterLevel",waterlevel)
+	}
+},1000);
+
 function sleepFor( sleepDuration ){
     var now = new Date().getTime();
     while(new Date().getTime() < now + sleepDuration){ /* do nothing */ } 
@@ -144,7 +186,9 @@ io.on('connection', function(socket){
 		console.log("Serving seed");
 		socket.emit('mapseed', mapseed);
 
-		sleepFor(1000);
+		socket.emit("setForcedWaterLevel",waterlevel)
+
+		sleepFor(300);
 		let newpoint = SpawnManager.dispatchSpawnPoint();
 		socket.emit('setSpawnPoint', newpoint.x, newpoint.y );
 		console.log("Requested spawnpoint at " + newpoint.x + ' ' + newpoint.y );
@@ -193,6 +237,14 @@ io.on('connection', function(socket){
 		//console.log("removed totem at coords : " + x + " " + y);
 		removeTotem(x,y);
 		socket.broadcast.emit('removeTotem',x,y);
+	});
+
+	socket.on('launchProjectile', function(sX,sY,tX,tY){
+		//console.log("removed totem at coords : " + x + " " + y);
+		//removeTotem(x,y);
+
+		// to remove target totem? ( do it clientside rather )
+		socket.broadcast.emit('launchedProjectile',sX,sY,tX,tY);
 	});
 	
 	socket.on("disconnect", function(){
