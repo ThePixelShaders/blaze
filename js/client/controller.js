@@ -30,7 +30,13 @@ function checkIfFriendlyTotemInRange( x, y, range ){
 	return false;
 }
 
+// This is used for the login screen thing
+var CONTROLLER_DISABLED = true;
+
 function onDocumentMouseMove( event ) {
+
+	if ( CONTROLLER_DISABLED ) { return; }
+
 	event.preventDefault();
 	
 	mouse.set( ( event.clientX / window.innerWidth ) * 2 - 1, - ( event.clientY / window.innerHeight ) * 2 + 1 );
@@ -104,6 +110,8 @@ var RecipeManager = {
 }
 
 function onDocumentMouseDown( event ) {
+
+	if ( CONTROLLER_DISABLED ) { return; }
 	
 	//console.log( event.srcElement.nodeName )
 	//if (event.srcElement.nodeName !== 'INPUT') {
@@ -249,6 +257,9 @@ var isShiftDown = false;
 
 
 function onDocumentKeyDown( event ) {
+
+	if ( CONTROLLER_DISABLED ) { return; }
+
 	switch ( event.keyCode ) {
 		case 16: isShiftDown = true; break;
 
@@ -331,6 +342,9 @@ function onDocumentKeyDown( event ) {
 }
 
 function onDocumentKeyUp( event ) {
+
+	if ( CONTROLLER_DISABLED ) { return; }
+
 	switch ( event.keyCode ) {
 		case 16: isShiftDown = false; break;
 
@@ -371,6 +385,8 @@ let vectorright = new THREE.Vector3(1,0,0);
 let speed = new THREE.Vector3(0,0,0);
 
 function processInput() {
+
+	if ( CONTROLLER_DISABLED ) { return; }
 	
 	if ( spectateMode ){
 		camera.lookAt( 0, 0, 0 );
