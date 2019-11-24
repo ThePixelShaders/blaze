@@ -403,15 +403,21 @@ function processInput() {
 		
 		let sx = x - x0;
 		let sy = y - y0;
+
+		if ( heightmap[x0] ){
+			if ( heightmap[x0][y0] ){ // make sure we're in bounds
+				let top = Perlin.lerp ( heightmap[x0][y0], heightmap[x1][y0], sx );
+				let bottom = Perlin.lerp ( heightmap[x0][y1], heightmap[x1][y1], sx );
+				let xlerp = Perlin.lerp ( top,bottom, sy );
+				let left = Perlin.lerp ( heightmap[x0][y0], heightmap[x0][y1], sy );
+				let right = Perlin.lerp ( heightmap[x1][y0], heightmap[x1][y1], sy );
+				let ylerp = Perlin.lerp ( left,right, sx );
+				let val = Perlin.lerp( xlerp, ylerp, 0.5 );
+				
+				camera.position.y = camera.position.y*0.8 + (val+300)*0.2;
+			}
+		}
 		
-		let top = Perlin.lerp ( heightmap[x0][y0], heightmap[x1][y0], sx );
-		let bottom = Perlin.lerp ( heightmap[x0][y1], heightmap[x1][y1], sx );
-		let xlerp = Perlin.lerp ( top,bottom, sy );
-		let left = Perlin.lerp ( heightmap[x0][y0], heightmap[x0][y1], sy );
-		let right = Perlin.lerp ( heightmap[x1][y0], heightmap[x1][y1], sy );
-		let ylerp = Perlin.lerp ( left,right, sx );
-		let val = Perlin.lerp( xlerp, ylerp, 0.5 );
-		
-		camera.position.y = camera.position.y*0.8 + (val+300)*0.2;
+
 	}
 }
