@@ -208,6 +208,13 @@ function onDocumentMouseDown( event ) {
 			}else{
 
 				switch( SceneManager.totemMap[tX][tZ] ){
+					case TotemTypes.petrol:
+						setCooldown(3000, "Extractig oil...")
+						var oilCount = ResourceManager.getResourceCount(ResourceTypes.petrol);
+						oilCount = oilCount + Math.floor(Math.random() * 2) + 4;
+						ResourceManager.setResourceCount(ResourceTypes.petrol, oilCount);
+
+						break;
 					case TotemTypes.forest:
 						if ( checkIfTotemInRange(tX,tZ,TotemTypes.lumber1, 4) ){ // if there is a lumberjack nearby
 							// cut the forest
@@ -243,9 +250,26 @@ function onDocumentMouseDown( event ) {
 						}
 
 						break;
-					default:
-						SceneManager.removeTotem( tX, tZ, true );
-						socket.emit("removeTotem",tX,tZ);
+
+					case TotemTypes.nuclearplant:
+							var metalcount = ResourceManager.getResourceCount(ResourceTypes.metal);
+							
+						if(ResourceManager.getResourceCount(ResourceTypes.stone) >= 1){		
+							setCooldown(3000, "Smelting metal...");
+
+							metalcount += 1;
+
+							ResourceManager.setResourceCount(ResourceTypes.stone, (ResourceManager.getResourceCount(ResourceTypes.stone) - 1));
+							ResourceManager.setResourceCount(ResourceTypes.metal, metalcount);
+						}
+						else {
+							// set warning that you're trying to cut forest too far away
+							additionalText.displayText("You don't have enough ore");
+						}
+							break;
+					// default:
+					// 	SceneManager.removeTotem( tX, tZ, true );
+					// 	socket.emit("removeTotem",tX,tZ);
 				}
 
 			}
@@ -280,9 +304,14 @@ function onDocumentMouseDown( event ) {
 						if ( checkIfTotemInRange(tX,tZ,TotemTypes.cannon, 8) ){
 							// if there is an available cannon in range
 							// taraneala pe lastCheckX, lastCheckY
-
-							launchProjectile(lastCheckX,lastCheckY, tX, tZ, true);
-							socket.emit( "launchProjectile", lastCheckX, lastCheckY, tX, tZ );
+							if(RecipeManager.getResourceCount(ResourceTypes.petrol) >= 5){
+								launchProjectile(lastCheckX,lastCheckY, tX, tZ, true);
+								socket.emit( "launchProjectile", lastCheckX, lastCheckY, tX, tZ );
+								RecipeManager.setResourceCount(ResourceTypes.petrol, RecipeManager.getResourceCount(ResourceTypes.petrol) - 5);
+							}
+							else{ 
+								additionalText.displayText("You don't have enough oil!");
+							}
 
 							// Also... check for a recipe and consume materials
 						}else{
@@ -331,16 +360,17 @@ function onDocumentMouseDown( event ) {
 										}
 									break;
 								case TotemTypes.petrol:
-										if ( RecipeManager.gotMaterial( RecipeManager.recipes.gasWell ) ){
-											SceneManager.addTotem( tX, tZ, totemtype, true ); // animated, not owned ( last true, true )
-											socket.emit( "placeTotem", tX, tZ, totemtype); // not owned
-											//additionalText.displayText("You need ");
-											RecipeManager.consumeMaterial( RecipeManager.recipes.gasWell );
-											setCooldown(3000, "Assembling gas well...");
-										}else{
-											additionalText.displayText("Not enough resources to assemble a gas well!");
-										}
+									if ( RecipeManager.gotMaterial( RecipeManager.recipes.gasWell ) ){
+										SceneManager.addTotem( tX, tZ, totemtype, true ); // animated, not owned ( last true, true )
+										socket.emit( "placeTotem", tX, tZ, totemtype); // not owned
+										//additionalText.displayText("You need ");
+										RecipeManager.consumeMaterial( RecipeManager.recipes.gasWell );
+										setCooldown(3000, "Assembling gas well...");
+									}else{
+										additionalText.displayText("Not enough resources to assemble a gas well!");
+									}
 									break;
+					
 								case TotemTypes.nuclearplant:
 										if ( RecipeManager.gotMaterial( RecipeManager.recipes.factory ) ){
 											SceneManager.addTotem( tX, tZ, totemtype, true ); // animated, not owned ( last true, true )
