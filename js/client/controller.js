@@ -87,6 +87,7 @@ var RecipeManager = {
 	recipes:{
 		lumberjack: [0,4,2,0,0],
 		mine: [0,12,1,0,0],
+		sapling: [0,1,0,0,0]
 		//factory: [0,]
 	},
 
@@ -235,11 +236,16 @@ function onDocumentMouseDown( event ) {
 
 								break;
 							case TotemTypes.sappling:
-								SceneManager.addTotem( tX, tZ, totemtype, true, true ); // animated, not owned ( last true, true )
-								socket.emit( "placeTotem", tX, tZ, totemtype, true ); // not owned
-								//additionalText.displayText("You need ");
-								RecipeManager.consumeMaterial( RecipeManager.recipes.lumberjack )
-								setCooldown(3000, "Planting tree...")
+								if ( RecipeManager.gotMaterial( RecipeManager.recipes.sapling ) ){
+									SceneManager.addTotem( tX, tZ, totemtype, true, true ); // animated, not owned ( last true, true )
+									socket.emit( "placeTotem", tX, tZ, totemtype, true ); // not owned
+									//additionalText.displayText("You need ");
+									RecipeManager.consumeMaterial( RecipeManager.recipes.sapling )
+									setCooldown(3000, "Planting tree...")
+								}else{
+									additionalText.displayText("Not enough resources to plant tree!");
+								}
+
 								break;	
 							default:
 								addTotemInList(totemtype, tX, tZ);
