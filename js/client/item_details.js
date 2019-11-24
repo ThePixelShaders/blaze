@@ -1,36 +1,31 @@
-function itemDetails(wood, rocks, metal, oil, description){
+function itemDetails(wood, rocks, metal, description){
     var woodPrice = document.getElementById("woodPrice");
     var rocksPrice = document.getElementById("rocksPrice");
-    var oilPrice = document.getElementById("oilPrice");
     var metalPrice = document.getElementById("metalPrice");
+    var itemDescription = document.getElementById("item-description");
 
-    if(wood != null){
-        woodPrice.innerHTML += wood;
+    if(wood != ""){
+        woodPrice.innerHTML = "Wood: " + "<span class=\"priceSpan\" >" + wood + "</span>";
     }
     else
     {
         woodPrice.innerHTML = null;
     }
 
-    if(rocks != null){
-        rocksPrice.innerHTML += wood;
+    if(rocks != ""){
+        rocksPrice.innerHTML = "Rocks: " + "<span class=\"priceSpan\" >" + rocks + "</span>";351512
     }
     else
     {
         rocksPrice.innerHTML = null;
     }
 
-    if(metal != null){
-        metalPrice.innerHTML += metal;
+    if(metal != ""){
+        metalPrice.innerHTML = "Metal: " + "<span class=\"priceSpan\" >" + metal + "</span>";
     }
     else{
         metalPrice.innerHTML = null;
     }
 
-    if(oil != null){
-        oilPrice.innerHTML += oil;
-    }
-    else{ 
-        oilPrice.innerHTML = null;
-    }
+    itemDescription.innerHTML = description;
 }
