@@ -145,6 +145,11 @@ io.on('connection', function(socket){
 
 
 	});
+
+	socket.on('sendNickname', function(nickname){
+		console.log ( "socket " + socket.id + ' nickname : ' + nickname )
+		socket.broadcast.emit('playerNickname',socket.id,nickname)
+	});
 	
 	socket.on('requestdeltas', function(){
 		if ( deltaBuffer.length > 0 ){

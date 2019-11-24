@@ -2,6 +2,7 @@
 
 additionalText = {
     currentText : "",
+    lasthandler : null,
 
     init : function () {
         this.hideText();
@@ -18,8 +19,12 @@ additionalText = {
         additionalText.style.display = "block";
         console.log(additionalText.getAttribute("display"));
         additionalText.innerHTML = "<p>" + text + "</p>";
+
+        if ( this.lasthandler ){
+            clearTimeout(this.lasthandler);
+        }
         
-        setTimeout(function(obj) {
+        this.lasthandler = setTimeout(function(obj) {
             obj.hideText();
         }, 3000, this);
 
