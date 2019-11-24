@@ -225,14 +225,80 @@ function onDocumentMouseDown( event ) {
 							let totemtype = HotBar.getCurrentActive();
 
 							switch( totemtype ){
+								case TotemTypes.house1:
+										if ( RecipeManager.gotMaterial( RecipeManager.recipes.house ) ){
+											SceneManager.addTotem( tX, tZ, totemtype, true ); // animated, not owned ( last true, true )
+											socket.emit( "placeTotem", tX, tZ, totemtype); // not owned
+											//additionalText.displayText("You need ");
+											RecipeManager.consumeMaterial( RecipeManager.recipes.house );
+											setCooldown(3000, "Building house...");
+										}else{
+											additionalText.displayText("Not enough resources to build a house!");
+										}
+									break;
+								case TotemTypes.mine:
+										if ( RecipeManager.gotMaterial( RecipeManager.recipes.mine ) ){
+											SceneManager.addTotem( tX, tZ, totemtype, true ); // animated, not owned ( last true, true )
+											socket.emit( "placeTotem", tX, tZ, totemtype); // not owned
+											//additionalText.displayText("You need ");
+											RecipeManager.consumeMaterial( RecipeManager.recipes.mine );
+											setCooldown(3000, "Digging mine...");
+										}else{
+											additionalText.displayText("Not enough resources to dig a mine!");
+										}
+									break;
+								case TotemTypes.petrol:
+										if ( RecipeManager.gotMaterial( RecipeManager.recipes.gasWell ) ){
+											SceneManager.addTotem( tX, tZ, totemtype, true ); // animated, not owned ( last true, true )
+											socket.emit( "placeTotem", tX, tZ, totemtype); // not owned
+											//additionalText.displayText("You need ");
+											RecipeManager.consumeMaterial( RecipeManager.recipes.gasWell );
+											setCooldown(3000, "Assembling gas well...");
+										}else{
+											additionalText.displayText("Not enough resources to assemble a gas well!");
+										}
+									break;
+								case TotemTypes.nuclearplant:
+										if ( RecipeManager.gotMaterial( RecipeManager.recipes.factory ) ){
+											SceneManager.addTotem( tX, tZ, totemtype, true ); // animated, not owned ( last true, true )
+											socket.emit( "placeTotem", tX, tZ, totemtype); // not owned
+											//additionalText.displayText("You need ");
+											RecipeManager.consumeMaterial( RecipeManager.recipes.factory );
+											setCooldown(3000, "Building factory...");
+										}else{
+											additionalText.displayText("Not enough resources to build a factory!");
+										}
+									break;
+								case TotemTypes.cannon:
+									if ( RecipeManager.gotMaterial( RecipeManager.recipes.cannon ) ){
+										SceneManager.addTotem( tX, tZ, totemtype, true ); // animated, not owned ( last true, true )
+										socket.emit( "placeTotem", tX, tZ, totemtype); // not owned
+										//additionalText.displayText("You need ");
+										RecipeManager.consumeMaterial( RecipeManager.recipes.cannon );
+										setCooldown(3000, "Building a cannon...");
+									}else{
+										additionalText.displayText("Not enough resources to build a cannon!");
+									}
+								break;
+								case TotemTypes.tower:
+									if ( RecipeManager.gotMaterial( RecipeManager.recipes.tower ) ){
+										SceneManager.addTotem( tX, tZ, totemtype, true ); // animated, not owned ( last true, true )
+										socket.emit( "placeTotem", tX, tZ, totemtype); // not owned
+										//additionalText.displayText("You need ");
+										RecipeManager.consumeMaterial( RecipeManager.recipes.tower );
+										setCooldown(3000, "Building tower...");
+									}else{
+										additionalText.displayText("Not enough resources to build a tower!");
+									}
+								break;
 								case TotemTypes.lumber1:
 									if ( RecipeManager.gotMaterial( RecipeManager.recipes.lumberjack ) )
 									{
 										SceneManager.addTotem( tX, tZ, totemtype, true );
 										socket.emit( "placeTotem", tX, tZ, totemtype );
 										//additionalText.displayText("You need ");
-										RecipeManager.consumeMaterial( RecipeManager.recipes.lumberjack )
-										setCooldown(3000, "Building Lumberjack...")
+										RecipeManager.consumeMaterial( RecipeManager.recipes.lumberjack );
+										setCooldown(3000, "Building Lumberjack...");
 										//ResourceManager.setResourceCount(ResourceTypes.wood, ResourceManager.getResourceCount(ResourceTypes.wood) - 4);
 										//ResourceManager.setResourceCount(ResourceTypes.stone, ResourceManager.getResourceCount(ResourceTypes.stone) - 2);
 										//let debug = ResourceManager.resources;
@@ -247,8 +313,8 @@ function onDocumentMouseDown( event ) {
 										SceneManager.addTotem( tX, tZ, totemtype, true, true ); // animated, not owned ( last true, true )
 										socket.emit( "placeTotem", tX, tZ, totemtype, true ); // not owned
 										//additionalText.displayText("You need ");
-										RecipeManager.consumeMaterial( RecipeManager.recipes.sapling )
-										setCooldown(3000, "Planting tree...")
+										RecipeManager.consumeMaterial( RecipeManager.recipes.sapling );
+										setCooldown(3000, "Planting tree...");
 									}else{
 										additionalText.displayText("Not enough resources to plant tree!");
 									}
