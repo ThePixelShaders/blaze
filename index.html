@@ -199,6 +199,7 @@
 
 			#additionalText {
 				position: absolute;
+				max-width: 150px;
 				bottom: 50px;
 				left: 5%;
 			}
@@ -249,8 +250,7 @@
 	
 		<link href='css/index.css' rel='stylesheet' type='text/css'>
 
-		
-		<div id="middle" hidden>
+		<div id="middle">
 			<div class="ui-element">
 				<div class = "textArea">
 					<h1>Login</h1>
@@ -259,7 +259,7 @@
 					<input type="text" value="" placeholder="Username" id="username" />
 				</div>
 				<div class = "textArea">
-					<button>Submit</button>
+					<button onclick="LoginFunctionality.sendNickname()">Submit</button>
 				</div>
 			</div>
 		</div>
@@ -375,6 +375,7 @@
 		<script src="js/client/additionalText.js"></script>
 		<script src="js/client/totemloader.js"></script>
 		<script src="js/client/scenemanager.js"></script>
+		<script src="js/client/totemShower.js"></script>
 		<script src="js/client/controller.js"></script>
 		<script src="js/client/gui.js"></script>
 		<script src="config.js"></script>

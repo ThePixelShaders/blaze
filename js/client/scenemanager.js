@@ -49,6 +49,8 @@ SceneManager = {
 	placedTotems : null,
 	ownerMap : [],
 	ownerID : "none", // this is the client's owner ID ( serverside socket id )
+	nickname : "none",
+	playerNicknames : {},
 	
 	dirtyBlocks : [],
 	
