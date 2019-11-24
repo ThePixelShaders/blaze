@@ -8,10 +8,15 @@ var HotBar = {
 	}
 }
 
+var lastCheckX = null
+var lastCheckY = null
+
 function checkIfTotemInRange( x, y, type, range ){
 	for ( let itx = x-range; itx <= x + range; itx++ ){
 		for ( let ity = y-range; ity <= y+ range; ity++ ){
 			if ( SceneManager.totemMap[itx][ity] == type ){
+				lastCheckX = itx;
+				lastCheckY = ity;
 				return true;
 			}
 		}
@@ -90,7 +95,8 @@ var RecipeManager = {
 		mine: [0,20,1,0,0],
 		gasWell: [0,10,10,0,0],
 		factory: [0,5,15,2,0],
-		cannon: [0,10,10,10,0],
+		//cannon: [0,10,10,10,0],
+		cannon: [0,0,0,0,0],
 		tower: [0,5,5,10,0],
 		sapling: [0,1,0,0,0]
 	},
@@ -111,6 +117,66 @@ var RecipeManager = {
 			}
 		}
 	}
+
+}
+
+var cannonballs = []
+
+function moveCannonballs(){
+	for ( let i = 0; i < cannonballs.length; i++ ){
+
+		if ( cannonballs[i].firingDirection == "up" ){
+			cannonballs[i].position.y += cannonballs[i].ballspeed;
+			if ( cannonballs[i].position.y > cannonballs[i].targetHeightUp ){
+				//scene.remove(cannonballs[i])
+				//cannonballs.splice(i,1);
+				cannonballs[i].firingDirection = "down";
+				cannonballs[i].position.x = -2125+cannonballs[i].tX*50;
+				cannonballs[i].position.z = -2125+cannonballs[i].tY*50;
+			}
+		}else{
+			cannonballs[i].position.y -= cannonballs[i].ballspeed;
+			if ( cannonballs[i].position.y < cannonballs[i].targetHeightDown ){
+				scene.remove(cannonballs[i])
+				cannonballs.splice(i,1);
+			}
+		}
+
+	}
+}
+
+
+
+function launchProjectile( sX, sY, tX, tY, responsibleForRemove ){
+
+	// Set timeout to destroy the attacked building
+	if ( responsibleForRemove ){
+		setTimeout( function( targetX, targetY ){
+			SceneManager.removeTotem(targetX,targetY)
+			socket.emit("removeTotem",targetX,targetY)
+		}, 3000, tX, tY )
+	}
+
+	// Create cannonball and animate it in the loop
+
+	let cannonballGeometry = new THREE.SphereGeometry( 5, 32, 32 );
+	let cannonballMaterial = new THREE.MeshBasicMaterial( {color: 0x333333, side: THREE.DoubleSide} );
+	var sphere = new THREE.Mesh( cannonballGeometry, cannonballMaterial );
+	//voxel.position.set(-2125+x*50,height,-2125+y*50);
+	sphere.position.x = -2125+sX*50;
+	sphere.position.y = heightmap[sX][sY]+25;
+	sphere.position.z = -2125+sY*50;
+
+	sphere.tX = tX;
+	sphere.tY = tY;
+	sphere.targetHeightUp = sphere.position.y + 300;
+	sphere.targetHeightDown = heightmap[tX][tY]+25;
+	sphere.ballspeed = ( 300 + 300 + heightmap[sX][sY]+25 - heightmap[tX][tY]-25 )/80;
+	sphere.firingDirection = "up";
+
+	scene.add( sphere );
+
+	cannonballs.push(sphere);
 
 }
 
@@ -142,6 +208,13 @@ function onDocumentMouseDown( event ) {
 			}else{
 
 				switch( SceneManager.totemMap[tX][tZ] ){
+					case TotemTypes.petrol:
+						setCooldown(3000, "Extractig oil...")
+						var oilCount = ResourceManager.getResourceCount(ResourceTypes.petrol);
+						oilCount = oilCount + Math.floor(Math.random() * 2) + 4;
+						ResourceManager.setResourceCount(ResourceTypes.petrol, oilCount);
+
+						break;
 					case TotemTypes.forest:
 						if ( checkIfTotemInRange(tX,tZ,TotemTypes.lumber1, 4) ){ // if there is a lumberjack nearby
 							// cut the forest
@@ -177,9 +250,26 @@ function onDocumentMouseDown( event ) {
 						}
 
 						break;
-					default:
-						SceneManager.removeTotem( tX, tZ, true );
-						socket.emit("removeTotem",tX,tZ);
+
+					case TotemTypes.nuclearplant:
+							var metalcount = ResourceManager.getResourceCount(ResourceTypes.metal);
+							
+						if(ResourceManager.getResourceCount(ResourceTypes.stone) >= 1){		
+							setCooldown(3000, "Smelting metal...");
+
+							metalcount += 1;
+
+							ResourceManager.setResourceCount(ResourceTypes.stone, (ResourceManager.getResourceCount(ResourceTypes.stone) - 1));
+							ResourceManager.setResourceCount(ResourceTypes.metal, metalcount);
+						}
+						else {
+							// set warning that you're trying to cut forest too far away
+							additionalText.displayText("You don't have enough ore");
+						}
+							break;
+					// default:
+					// 	SceneManager.removeTotem( tX, tZ, true );
+					// 	socket.emit("removeTotem",tX,tZ);
 				}
 
 			}
@@ -208,7 +298,31 @@ function onDocumentMouseDown( event ) {
 			}*/
 
 			if ( SceneManager.totemMap[tX][tZ] != TotemTypes.empty ){
-				additionalText.displayText("Cannot place over existing objects!");
+
+				if ( SceneManager.ownerMap[tX][tZ] != "none" ){
+					if ( SceneManager.ownerMap[tX][tZ] != SceneManager.ownerID ) {// if the clicked thing is not oursx
+						if ( checkIfTotemInRange(tX,tZ,TotemTypes.cannon, 8) ){
+							// if there is an available cannon in range
+							// taraneala pe lastCheckX, lastCheckY
+							if(ResourceManager.getResourceCount(ResourceTypes.petrol) >= 5){
+								launchProjectile(lastCheckX,lastCheckY, tX, tZ, true);
+								socket.emit( "launchProjectile", lastCheckX, lastCheckY, tX, tZ );
+								ResourceManager.setResourceCount(ResourceTypes.petrol, ResourceManager.getResourceCount(ResourceTypes.petrol) - 5);
+							}
+							else{ 
+								additionalText.displayText("You don't have enough oil!");
+							}
+
+							// Also... check for a recipe and consume materials
+						}else{
+							additionalText.displayText("No available cannon nearby!");
+						}
+					}else{
+						additionalText.displayText("Cannot place over existing objects!");
+					}
+				}
+
+				
 			}else{
 				if ( heightmap[tX][tZ] < SceneManager.waterlevel-25 ){
 					additionalText.displayText("You're attempting to place underwater!");
@@ -248,16 +362,17 @@ function onDocumentMouseDown( event ) {
 										}
 									break;
 								case TotemTypes.petrol:
-										if ( RecipeManager.gotMaterial( RecipeManager.recipes.gasWell ) ){
-											SceneManager.addTotem( tX, tZ, totemtype, true ); // animated, not owned ( last true, true )
-											socket.emit( "placeTotem", tX, tZ, totemtype); // not owned
-											//additionalText.displayText("You need ");
-											RecipeManager.consumeMaterial( RecipeManager.recipes.gasWell );
-											setCooldown(3000, "Assembling gas well...");
-										}else{
-											additionalText.displayText("Not enough resources to assemble a gas well!");
-										}
+									if ( RecipeManager.gotMaterial( RecipeManager.recipes.gasWell ) ){
+										SceneManager.addTotem( tX, tZ, totemtype, true ); // animated, not owned ( last true, true )
+										socket.emit( "placeTotem", tX, tZ, totemtype); // not owned
+										//additionalText.displayText("You need ");
+										RecipeManager.consumeMaterial( RecipeManager.recipes.gasWell );
+										setCooldown(3000, "Assembling gas well...");
+									}else{
+										additionalText.displayText("Not enough resources to assemble a gas well!");
+									}
 									break;
+					
 								case TotemTypes.nuclearplant:
 										if ( RecipeManager.gotMaterial( RecipeManager.recipes.factory ) ){
 											SceneManager.addTotem( tX, tZ, totemtype, true ); // animated, not owned ( last true, true )
@@ -368,13 +483,15 @@ function onDocumentKeyDown( event ) {
 		case 39: /*right*/
 		case 68: /*D*/
 			isRightDown = true;
-			scoreboard.addScore("vasile", 420);
+			//scoreboard.addScore("vasile", 420);
 		break;
 
 		case 82: /*R*/ this.moveUp = true;
-		renderScoreBoard(); break;
+		//renderScoreBoard();
+		break;
 		case 70: /*F*/ this.moveDown = true;
-		scoreboard.addScore("ion", 69); break;
+		//scoreboard.addScore("ion", 69); 
+		break;
 
 		case 49: /*1*/ 
 			$("li.hotbar-box-active").removeClass("hotbar-box-active");
