@@ -1,0 +1,29 @@
+{
+  "name": "blaze",
+  "version": "1.0.0",
+  "description": "",
+  "main": "fileserver.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "http-server": "node fileserver.js",
+    "game-server": "node ./js/server/server.js",
+    "dev": "run-p http-server game-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ThePixelShaders/blaze.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ThePixelShaders/blaze/issues"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^2.3.0"
+  },
+  "homepage": "https://github.com/ThePixelShaders/blaze#readme",
+  "devDependencies": {
+    "npm-run-all": "^4.1.5"
+  }
+}
