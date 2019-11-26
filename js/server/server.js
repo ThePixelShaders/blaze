@@ -175,6 +175,8 @@ http.listen(port, function(){
   console.log('Listening on *:' + port);
 });
 
+var playerBuffer = {}
+
 io.on('connection', function(socket){
 	
 	console.log("User connected! " + socket.id.toString());
@@ -197,8 +199,10 @@ io.on('connection', function(socket){
 	});
 
 	socket.on('sendNickname', function(nickname){
+		playerBuffer[socket.id] = nickname;
 		console.log ( "socket " + socket.id + ' nickname : ' + nickname )
 		socket.broadcast.emit('playerNickname',socket.id,nickname)
+		io.emit("playerList", playerBuffer)
 	});
 	
 	socket.on('requestdeltas', function(){
@@ -248,6 +252,8 @@ io.on('connection', function(socket){
 	});
 	
 	socket.on("disconnect", function(){
+		playerBuffer[socket.id] = null;
+		io.emit("playerList", playerBuffer)
 		console.log("User disconnected!")
 		admin.notify("User disconnected!");
 	});

@@ -612,6 +612,10 @@ let vectorright = new THREE.Vector3(1,0,0);
 
 let speed = new THREE.Vector3(0,0,0);
 
+camera.position.x -= 1000;
+camera.position.z -= 300;
+
+
 function processInput() {
 
 	if ( CONTROLLER_DISABLED ) { return; }
@@ -620,9 +624,12 @@ function processInput() {
 		camera.lookAt( 0, 0, 0 );
 		camera.translateX( +3 );
 	}else{
-		//camera.lookAt( camera.position.x+Math.sin(targetTurn)*10, camera.position.y+mouse.y-5, camera.position.z+Math.cos(targetTurn)*10 );
-		camera.rotateOnAxis ( vectorright,mouse.y/100 );
-		camera.rotateOnWorldAxis ( vectorup,-mouse.x/50 );
+		camera.lookAt( camera.position.x+Math.sin(targetTurn)*10, camera.position.y, camera.position.z+Math.cos(targetTurn)*10 );
+		// camera.rotateOnAxis ( vectorright, );
+		// camera.rotateOnWorldAxis ( vectorup,-mouse.x/50 );
+
+		camera.rotation.x = 215 * Math.PI / 180;
+		camera.position.y = 800;
 	}
 	
 	if ( spectateMode && ( isLeftDown || isRightDown || isUpDown || isDownDown ) ){
@@ -654,32 +661,32 @@ function processInput() {
 	
 	speed.multiplyScalar(0.9);
 	
-	if ( speed.length() > 0.0001 ){
-		let x = ( camera.position.x + 2125 ) / 50;
-		let y = ( camera.position.z + 2125 ) / 50;
+	// if ( speed.length() > 0.0001 ){
+	// 	let x = ( camera.position.x + 2125 ) / 50;
+	// 	let y = ( camera.position.z + 2125 ) / 50;
 		
-		let x0 = Math.floor ( x );
-		let y0 = Math.floor ( y );
-		let x1 = x0+1;
-		let y1 = y0+1;
+	// 	let x0 = Math.floor ( x );
+	// 	let y0 = Math.floor ( y );
+	// 	let x1 = x0+1;
+	// 	let y1 = y0+1;
 		
-		let sx = x - x0;
-		let sy = y - y0;
+	// 	let sx = x - x0;
+	// 	let sy = y - y0;
 
-		if ( heightmap[x0] ){
-			if ( heightmap[x0][y0] ){ // make sure we're in bounds
-				let top = Perlin.lerp ( heightmap[x0][y0], heightmap[x1][y0], sx );
-				let bottom = Perlin.lerp ( heightmap[x0][y1], heightmap[x1][y1], sx );
-				let xlerp = Perlin.lerp ( top,bottom, sy );
-				let left = Perlin.lerp ( heightmap[x0][y0], heightmap[x0][y1], sy );
-				let right = Perlin.lerp ( heightmap[x1][y0], heightmap[x1][y1], sy );
-				let ylerp = Perlin.lerp ( left,right, sx );
-				let val = Perlin.lerp( xlerp, ylerp, 0.5 );
+	// 	if ( heightmap[x0] ){
+	// 		if ( heightmap[x0][y0] ){ // make sure we're in bounds
+	// 			let top = Perlin.lerp ( heightmap[x0][y0], heightmap[x1][y0], sx );
+	// 			let bottom = Perlin.lerp ( heightmap[x0][y1], heightmap[x1][y1], sx );
+	// 			let xlerp = Perlin.lerp ( top,bottom, sy );
+	// 			let left = Perlin.lerp ( heightmap[x0][y0], heightmap[x0][y1], sy );
+	// 			let right = Perlin.lerp ( heightmap[x1][y0], heightmap[x1][y1], sy );
+	// 			let ylerp = Perlin.lerp ( left,right, sx );
+	// 			let val = Perlin.lerp( xlerp, ylerp, 0.5 );
 				
-				camera.position.y = camera.position.y*0.8 + (val+300)*0.2;
-			}
-		}
+	// 			camera.position.y = camera.position.y*0.8 + (val+300)*0.2;
+	// 		}
+	// 	}
 		
 
-	}
+	// }
 }
