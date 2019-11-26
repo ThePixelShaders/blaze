@@ -95,8 +95,7 @@ var RecipeManager = {
 		mine: [0,20,1,0,0],
 		gasWell: [0,10,10,0,0],
 		factory: [0,5,15,2,0],
-		//cannon: [0,10,10,10,0],
-		cannon: [0,0,0,0,0],
+		cannon: [0,10,10,10,0],
 		tower: [0,5,5,10,0],
 		sapling: [0,1,0,0,0]
 	},
