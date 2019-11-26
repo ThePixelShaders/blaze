@@ -5,8 +5,8 @@
   "main": "fileserver.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "http-server": "node fileserver.js",
-    "game-server": "node ./js/server/server.js",
+    "http-server": "node fileserver.js > nul",
+    "game-server": "nodemon ./js/server/server.js",
     "dev": "run-p http-server game-server"
   },
   "repository": {
@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/ThePixelShaders/blaze#readme",
   "devDependencies": {
+    "nodemon": "^2.0.1",
     "npm-run-all": "^4.1.5"
   }
 }
