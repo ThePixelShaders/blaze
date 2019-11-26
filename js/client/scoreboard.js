@@ -93,9 +93,11 @@ function renderScoreBoard( playerList ){
 
     Object.keys(playerList).forEach(function(key) {
         let value = playerList[key];
-        var li = document.createElement("li");
-        li.innerHTML = value;
-        ul.appendChild(li);
+        if ( value ){
+            var li = document.createElement("li");
+            li.innerHTML = value;
+            ul.appendChild(li);
+        }
     });
 
     scoreBoardDiv.appendChild(ul);
