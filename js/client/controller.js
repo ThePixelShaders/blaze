@@ -611,8 +611,8 @@ let vectorright = new THREE.Vector3(1,0,0);
 
 let speed = new THREE.Vector3(0,0,0);
 
-camera.position.x -= 1000;
-camera.position.z -= 300;
+//camera.position.x -= 1000;
+//camera.position.z -= 300;
 
 
 function processInput() {
