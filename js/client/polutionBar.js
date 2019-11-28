@@ -1,3 +1,4 @@
+/*
 let polutionBar = document.getElementById("inside-polution-bar");
 
 function setPolutionBar(value){
@@ -5,3 +6,4 @@ function setPolutionBar(value){
     value += "%";
     polutionBar.style.width = value;
 }
+*/
