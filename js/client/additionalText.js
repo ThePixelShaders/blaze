@@ -8,14 +8,14 @@ additionalText = {
 
     displayText : function(text) {
 
-        console.log("displayText(" + text + ")");
+        //console.log("displayText(" + text + ")");
 
         currentText = text;
         var additionalText = document.getElementById("additionalText");
 
-        console.log(additionalText.getAttribute("display"));
+        //console.log(additionalText.getAttribute("display"));
         additionalText.style.display = "block";
-        console.log(additionalText.getAttribute("display"));
+        //console.log(additionalText.getAttribute("display"));
         additionalText.innerHTML = "<p>" + text + "</p>";
 
         if ( this.lasthandler ){

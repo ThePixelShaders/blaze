@@ -599,7 +599,7 @@ function onDocumentWheel ( event ){
 		$("li#hotbar-box" + HotBar.currentActive).addClass("hotbar-box-active");
 		itemDetails(HotBar.currentActive);
 	}
-	console.log(HotBar.currentActive);
+	//console.log(HotBar.currentActive);
 }
 
 var spectateMode = true;
