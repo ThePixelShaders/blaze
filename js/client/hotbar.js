@@ -1,3 +1,4 @@
+/*
 function hotbar(){
 
     var input = document.getElementById('hotbar-input');
@@ -30,3 +31,4 @@ function hotbar(){
             break;
     }
 }
+*/
